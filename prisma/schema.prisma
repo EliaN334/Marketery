@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  first_name String
+  last_name  String
+  email      String     @unique
+  password   String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  products   Product[]
+  cart_items CartItem[]
+}
+
+model Product {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  qty         Int
+  image       String
+  discount    Float?     @default(0)
+  user        User       @relation(fields: [user_id], references: [id])
+  user_id     String     @db.ObjectId
+  categories  Category[]
+  cart_item   CartItem[]
+}
+
+model CartItem {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  product    Product @relation(fields: [product_id], references: [id])
+  product_id String  @db.ObjectId
+  user       User?   @relation(fields: [user_id], references: [id])
+  user_id    String  @db.ObjectId
+}
+
+model Category {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  image      String
+  product    Product @relation(fields: [product_id], references: [id])
+  product_id String  @db.ObjectId
+}
