@@ -1,30 +1,35 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc';
 
-export const userQueryRouter = router({
+export const TypeUser = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  email: z.string().email(),
+  password: z.string().regex(/[A-Z][0-9]/),
+});
+
+export const userRouter = router({
+  listUsers: publicProcedure.query(
+    async ({ ctx: { prisma } }) => await prisma.user.findMany()
+  ),
+  getUserById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(
+      async ({ ctx: { prisma }, input }) =>
+        await prisma.user.findUnique({ where: { id: input.id } })
+    ),
+
   createUser: publicProcedure
     .input(
       z.object({
         first_name: z.string(),
         last_name: z.string(),
-        email: z.string(),
-        password: z.string(),
+        email: z.string().email(),
+        password: z.string().regex(/[A-Z][0-9]/),
       })
     )
-    .mutation(async ({ input: { email, first_name, last_name, password } }) => {
-      await prisma?.user.create({
-        data: {
-          email,
-          first_name,
-          last_name,
-          password,
-        },
-      });
-      return {
-        message: 'User created',
-      };
-    }),
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany({});
-  }),
+    .mutation(
+      async ({ ctx: { prisma }, input }) =>
+        await prisma.user.create({ data: input })
+    ),
 });
