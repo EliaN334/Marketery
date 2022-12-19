@@ -1,27 +1,25 @@
 import { type NextPage } from 'next';
-import Head from 'next/head';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { useForm } from 'react-hook-form';
-import { trpc } from '../utils/trpc';
-import { TypeUser } from '../server/trpc/router/users';
+import { trpc, type RouterOutputs } from '../utils/trpc';
 
-type FormValues = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-};
+type FormValues = RouterOutputs['user']['listUsers'][0];
 
 const Home: NextPage = () => {
+  const { data: session } = useSession();
   const { register, handleSubmit } = useForm<FormValues>();
-  const users = trpc.user.listUsers.useQuery();
-  const mutationCreateUser = trpc.user.createUser.useMutation({
-    onSuccess: () => users.refetch(),
+  const { data, refetch } = trpc.user.listUsers.useQuery();
+  const { mutate: createUser } = trpc.user.createUser.useMutation({
+    onSuccess: () => refetch(),
   });
+
+  const { mutate: updateUser } = trpc.user.updateUser.useMutation();
+  const { mutate: deleteUser } = trpc.user.deleteUser.useMutation();
   const onSubmit = async (data: FormValues) => {
-    console.dir(data);
-    mutationCreateUser.mutate(data);
+    createUser(data);
   };
+  console.log(data);
   return (
     <>
       <Head>
@@ -51,19 +49,35 @@ const Home: NextPage = () => {
             <button className='text-white'>Create user</button>
           </form>
 
-          <div className='flex flex-col'>
+          <div className='flex flex-col text-white'>
             <h1 className='text-white'>Users:</h1>
-            {users.data?.map((user) => (
-              <div
-                className='flex flex-col border border-white p-5 text-white'
-                key={user.id}
-              >
-                {user.first_name}
-                {user.email}
-                {user.password}
-              </div>
-            ))}
+            {data ? (
+              data?.map((user) => (
+                <div
+                  className='flex flex-col border border-white p-5 text-white'
+                  key={user.id}
+                >
+                  {user.first_name}
+                  <br />
+                  {user.email}
+                  <br />
+                  {user.password}
+                </div>
+              ))
+            ) : (
+              <div>Loading...</div>
+            )}
           </div>
+        </div>
+
+        <div className='text-white'>
+          <button
+            onClick={session?.user ? () => signOut() : () => signIn('github')}
+          >
+            {session?.user ? `Sign out` : 'Sign in'}
+          </button>
+
+          <p>{session?.user && `Signed as ${session?.user?.email}`}</p>
         </div>
       </main>
     </>
