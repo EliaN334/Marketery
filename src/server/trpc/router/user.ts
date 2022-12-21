@@ -9,14 +9,16 @@ export const userRouter = router({
     .input(z.object({ id: z.string() }))
     .query(
       async ({ ctx: { prisma }, input }) =>
-        await prisma.user.findUnique({ where: { id: input.id } })
+        await prisma.user.findFirst({ where: { id: input.id } })
     ),
   createUser: protectedProcedure
     .input(
       z.object({
         first_name: z.string(),
         last_name: z.string(),
+        full_name: z.string(),
         email: z.string().email(),
+        image: z.string().url(),
         password: z.string(),
       })
     )
@@ -30,7 +32,10 @@ export const userRouter = router({
         id: z.string(),
         first_name: z.string().optional(),
         last_name: z.string().optional(),
+        full_name: z.string().optional(),
         email: z.string().email().optional(),
+        image: z.string().url().optional(),
+        role: z.enum(['USER', 'ADMIN']).optional(),
         password: z.string().optional(),
       })
     )

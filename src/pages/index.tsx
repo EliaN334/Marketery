@@ -2,7 +2,7 @@ import { type NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
-import { trpc, type RouterOutputs } from '../utils/trpc';
+import { trpc, type RouterOutputs } from '@/utils/trpc';
 
 type FormValues = RouterOutputs['user']['listUsers'][0];
 
@@ -13,13 +13,13 @@ const Home: NextPage = () => {
   const { mutate: createUser } = trpc.user.createUser.useMutation({
     onSuccess: () => refetch(),
   });
-
-  const { mutate: updateUser } = trpc.user.updateUser.useMutation();
-  const { mutate: deleteUser } = trpc.user.deleteUser.useMutation();
   const onSubmit = async (data: FormValues) => {
-    createUser(data);
+    createUser({
+      ...data,
+      full_name: `${data.first_name} ${data.last_name}`,
+      image: 'https://example.com',
+    });
   };
-  console.log(data);
   return (
     <>
       <Head>
@@ -72,7 +72,17 @@ const Home: NextPage = () => {
 
         <div className='text-white'>
           <button
-            onClick={session?.user ? () => signOut() : () => signIn('github')}
+            onClick={
+              session?.user
+                ? () => signOut()
+                : () => {
+                    try {
+                      signIn();
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }
+            }
           >
             {session?.user ? `Sign out` : 'Sign in'}
           </button>
