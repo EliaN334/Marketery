@@ -5,15 +5,18 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import { env } from '../../../env/server.mjs';
 import { prisma } from '../../../server/db/client';
-import { UserRole } from '@/types/global';
+import { UserProvider, UserRole } from '@/types/global';
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.name = user.full_name;
+        session.user.first_name = user.first_name;
+        session.user.last_name = user.last_name;
+        session.user.full_name = user.full_name;
         session.user.role = user.role;
+        session.user.image = user.image;
       }
       return session;
     },
@@ -30,9 +33,12 @@ export const authOptions: NextAuthOptions = {
           first_name: profile.login,
           last_name: profile.login,
           full_name: profile.login,
-          password: 'null',
-          image: profile.avatar_url,
-          github_account: true,
+          password: null,
+          image: {
+            url: profile.avatar_url,
+            public_id: null,
+          },
+          provider: UserProvider.GITHUB,
           role: UserRole.USER,
         };
       },

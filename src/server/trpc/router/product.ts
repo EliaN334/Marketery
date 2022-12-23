@@ -1,11 +1,21 @@
+import deleteCldImage from '@/utils/delete-cld-image';
 import { z } from 'zod';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
-import cloudinary from '@/utils/cloudinary';
 
 export const productRouter = router({
   listProducts: publicProcedure.query(
     async ({ ctx: { prisma } }) => await prisma.product.findMany()
   ),
+  listProductsByUserId: protectedProcedure
+    .input(
+      z.object({
+        user_id: z.string(),
+      })
+    )
+    .query(
+      async ({ ctx: { prisma }, input: { user_id } }) =>
+        await prisma.product.findMany({ where: { user_id } })
+    ),
   getProductById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(
@@ -18,15 +28,22 @@ export const productRouter = router({
         name: z.string(),
         description: z.string(),
         qty: z.number(),
-        image_preview: z.string(),
-        images: z.string().array().optional(),
+        image_preview: z.object({
+          url: z.string().url(),
+          public_id: z.string(),
+        }),
+        images: z
+          .object({
+            url: z.string().url(),
+            public_id: z.string(),
+          })
+          .array(),
         discount: z.number().optional(),
         user_id: z.string(),
       })
     )
-    .mutation(async ({ ctx: { prisma }, input: { image_preview } }) => {
-      console.log(image_preview);
-      // return await prisma.product.create({ data });
+    .mutation(async ({ ctx: { prisma }, input: data }) => {
+      return await prisma.product.create({ data });
     }),
   updateProduct: protectedProcedure
     .input(
@@ -35,10 +52,20 @@ export const productRouter = router({
         name: z.string().optional(),
         description: z.string().optional(),
         qty: z.number().optional(),
-        image_preview: z.string().url().optional(),
-        images: z.string().url().array().optional(),
+        image_preview: z
+          .object({
+            url: z.string().url(),
+            public_id: z.string(),
+          })
+          .optional(),
+        images: z
+          .object({
+            url: z.string().url(),
+            public_id: z.string(),
+          })
+          .array()
+          .optional(),
         discount: z.number().optional(),
-        user_id: z.string().optional(),
       })
     )
     .mutation(
@@ -52,8 +79,10 @@ export const productRouter = router({
         id: z.string(),
       })
     )
-    .mutation(
-      async ({ ctx: { prisma }, input: { id } }) =>
-        await prisma.product.delete({ where: { id } })
-    ),
+    .mutation(async ({ ctx: { prisma }, input: { id } }) => {
+      const product = await prisma.product.findFirst({ where: { id } });
+      deleteCldImage(product?.image_preview?.public_id as string);
+      product?.images.map(({ public_id }) => deleteCldImage(public_id));
+      return await prisma.product.delete({ where: { id } });
+    }),
 });

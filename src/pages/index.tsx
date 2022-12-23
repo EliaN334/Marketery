@@ -2,8 +2,7 @@ import { type NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
-import { trpc, type RouterOutputs } from '@/utils/trpc';
-import cloudinary from '@/utils/cloudinary';
+import { trpc } from '@/utils/trpc';
 
 type FormValues = {
   image_preview: FileList;
@@ -12,23 +11,15 @@ type FormValues = {
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const { register, handleSubmit } = useForm<FormValues>();
-  const { data, refetch } = trpc.user.listUsers.useQuery();
-  const { mutate } = trpc.product.createProduct.useMutation();
+  const { data } = trpc.user.listUsers.useQuery();
   const onSubmit = async (data: FormValues) => {
     const formData = new FormData();
-    formData.append('file', data.image_preview[0] as File);
+    formData.append('media', data.image_preview[0] as File);
     const response = await fetch('http://localhost:3000/api/upload', {
       method: 'POST',
       body: formData,
-    });
+    }).then((res) => res.json());
     console.log(response);
-    // mutate({
-    //   description: 'description 1',
-    //   image_preview: 'image',
-    //   name: 'Laptop',
-    //   qty: 2,
-    //   user_id: session?.user?.id as string,
-    // });
   };
   return (
     <>

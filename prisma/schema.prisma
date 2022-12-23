@@ -54,24 +54,29 @@ model Session {
 }
 
 model User {
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  first_name     String
-  last_name      String
-  full_name      String
-  role           UserRole   @default(USER)
-  image          String?
-  emailVerified  Boolean?   @default(false) @map("email_verified")
-  github_account Boolean    @default(false)
-  email          String     @unique
-  password       String
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
-  products       Product[]
-  cart_items     CartItem[]
-  accounts       Account[]
-  sessions       Session[]
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  first_name    String
+  last_name     String
+  full_name     String
+  role          UserRole   @default(USER)
+  image         Image
+  emailVerified Boolean?   @default(false) @map("email_verified")
+  provider      Provider?  @default(DEFAULT)
+  email         String     @unique
+  password      String?
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  products      Product[]
+  cart_items    CartItem[]
+  accounts      Account[]
+  sessions      Session[]
 
   @@map("user")
+}
+
+enum Provider {
+  GITHUB
+  DEFAULT
 }
 
 enum UserRole {
@@ -84,8 +89,8 @@ model Product {
   name          String
   description   String
   qty           Int
-  image_preview String
-  images        String[]
+  image_preview Image
+  images        Image[]
   discount      Float?     @default(0)
   user_id       String     @db.ObjectId
   user          User       @relation(fields: [user_id], references: [id])
@@ -93,6 +98,11 @@ model Product {
   cart_item     CartItem[]
 
   @@map("product")
+}
+
+type Image {
+  url       String
+  public_id String?
 }
 
 model CartItem {
@@ -108,7 +118,7 @@ model CartItem {
 model Category {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  image      String
+  image      Image
   product    Product @relation(fields: [product_id], references: [id])
   product_id String  @db.ObjectId
 

@@ -1,3 +1,4 @@
+import deleteCldImage from '@/utils/delete-cld-image';
 import { z } from 'zod';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 
@@ -5,6 +6,16 @@ export const categoryRouter = router({
   listCategories: publicProcedure.query(
     async ({ ctx: { prisma } }) => await prisma.category.findMany()
   ),
+  listCategoriesByProductId: protectedProcedure
+    .input(
+      z.object({
+        product_id: z.string(),
+      })
+    )
+    .query(
+      async ({ ctx: { prisma }, input: { product_id } }) =>
+        await prisma.category.findMany({ where: { product_id } })
+    ),
   getCategoryById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(
@@ -15,7 +26,10 @@ export const categoryRouter = router({
     .input(
       z.object({
         name: z.string(),
-        image: z.string().url(),
+        image: z.object({
+          url: z.string().url(),
+          public_id: z.string(),
+        }),
         product_id: z.string(),
       })
     )
@@ -28,7 +42,10 @@ export const categoryRouter = router({
       z.object({
         id: z.string(),
         name: z.string().optional(),
-        image: z.string().url().optional(),
+        image: z.object({
+          url: z.string().url(),
+          public_id: z.string(),
+        }),
         product_id: z.string().optional(),
       })
     )
@@ -43,8 +60,9 @@ export const categoryRouter = router({
         id: z.string(),
       })
     )
-    .mutation(
-      async ({ ctx: { prisma }, input: { id } }) =>
-        await prisma.category.delete({ where: { id } })
-    ),
+    .mutation(async ({ ctx: { prisma }, input: { id } }) => {
+      const category = await prisma.category.findFirst({ where: { id } });
+      deleteCldImage(category?.image.public_id as string);
+      return await prisma.category.delete({ where: { id } });
+    }),
 });

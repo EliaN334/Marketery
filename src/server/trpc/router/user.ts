@@ -1,11 +1,12 @@
+import deleteCldImage from '@/utils/delete-cld-image';
 import { z } from 'zod';
-import { router, publicProcedure, protectedProcedure } from '../trpc';
+import { router, protectedProcedure } from '../trpc';
 
 export const userRouter = router({
-  listUsers: publicProcedure.query(
+  listUsers: protectedProcedure.query(
     async ({ ctx: { prisma } }) => await prisma.user.findMany()
   ),
-  getUserById: publicProcedure
+  getUserById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(
       async ({ ctx: { prisma }, input }) =>
@@ -18,7 +19,10 @@ export const userRouter = router({
         last_name: z.string(),
         full_name: z.string(),
         email: z.string().email(),
-        image: z.string().url(),
+        image: z.object({
+          url: z.string().url(),
+          public_id: z.string(),
+        }),
         password: z.string(),
       })
     )
@@ -34,7 +38,12 @@ export const userRouter = router({
         last_name: z.string().optional(),
         full_name: z.string().optional(),
         email: z.string().email().optional(),
-        image: z.string().url().optional(),
+        image: z
+          .object({
+            url: z.string().url(),
+            public_id: z.string(),
+          })
+          .optional(),
         role: z.enum(['USER', 'ADMIN']).optional(),
         password: z.string().optional(),
       })
@@ -50,8 +59,9 @@ export const userRouter = router({
         id: z.string(),
       })
     )
-    .mutation(
-      async ({ ctx: { prisma }, input: { id } }) =>
-        await prisma.user.delete({ where: { id } })
-    ),
+    .mutation(async ({ ctx: { prisma }, input: { id } }) => {
+      const user = await prisma.product.findFirst({ where: { id } });
+      deleteCldImage(user?.image_preview?.public_id as string);
+      return await prisma.user.delete({ where: { id } });
+    }),
 });
