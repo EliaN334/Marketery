@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
+import cloudinary from '@/utils/cloudinary';
 
 export const productRouter = router({
   listProducts: publicProcedure.query(
@@ -17,16 +18,16 @@ export const productRouter = router({
         name: z.string(),
         description: z.string(),
         qty: z.number(),
-        image_preview: z.string().url(),
-        images: z.string().url().array(),
-        discount: z.number(),
+        image_preview: z.string(),
+        images: z.string().array().optional(),
+        discount: z.number().optional(),
         user_id: z.string(),
       })
     )
-    .mutation(
-      async ({ ctx: { prisma }, input: data }) =>
-        await prisma.product.create({ data })
-    ),
+    .mutation(async ({ ctx: { prisma }, input: { image_preview } }) => {
+      console.log(image_preview);
+      // return await prisma.product.create({ data });
+    }),
   updateProduct: protectedProcedure
     .input(
       z.object({

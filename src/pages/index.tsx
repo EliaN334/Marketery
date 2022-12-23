@@ -3,22 +3,32 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
 import { trpc, type RouterOutputs } from '@/utils/trpc';
+import cloudinary from '@/utils/cloudinary';
 
-type FormValues = RouterOutputs['user']['listUsers'][0];
+type FormValues = {
+  image_preview: FileList;
+};
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const { register, handleSubmit } = useForm<FormValues>();
   const { data, refetch } = trpc.user.listUsers.useQuery();
-  const { mutate: createUser } = trpc.user.createUser.useMutation({
-    onSuccess: () => refetch(),
-  });
+  const { mutate } = trpc.product.createProduct.useMutation();
   const onSubmit = async (data: FormValues) => {
-    createUser({
-      ...data,
-      full_name: `${data.first_name} ${data.last_name}`,
-      image: 'https://example.com',
+    const formData = new FormData();
+    formData.append('file', data.image_preview[0] as File);
+    const response = await fetch('http://localhost:3000/api/upload', {
+      method: 'POST',
+      body: formData,
     });
+    console.log(response);
+    // mutate({
+    //   description: 'description 1',
+    //   image_preview: 'image',
+    //   name: 'Laptop',
+    //   qty: 2,
+    //   user_id: session?.user?.id as string,
+    // });
   };
   return (
     <>
@@ -32,21 +42,10 @@ const Home: NextPage = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='flex flex-col text-white [&_input]:text-gray-900'>
               <label htmlFor='first'>First name</label>
-              <input id='first' {...register('first_name')} type='text' />
+              <input id='first' {...register('image_preview')} type='file' />
             </div>
-            <div className='flex flex-col text-white [&_input]:text-gray-900'>
-              <label htmlFor='last'>Last name</label>
-              <input id='last' {...register('last_name')} type='text' />
-            </div>
-            <div className='flex flex-col text-white [&_input]:text-gray-900'>
-              <label htmlFor='email'>Email</label>
-              <input id='email' {...register('email')} type='text' />
-            </div>
-            <div className='flex flex-col text-white [&_input]:text-gray-900'>
-              <label htmlFor='password'>Password</label>
-              <input id='password' {...register('password')} type='password' />
-            </div>
-            <button className='text-white'>Create user</button>
+
+            <button className='text-white'>Create project</button>
           </form>
 
           <div className='flex flex-col text-white'>
