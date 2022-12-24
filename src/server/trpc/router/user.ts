@@ -1,6 +1,11 @@
 import deleteCldImage from '@/utils/delete-cld-image';
 import { z } from 'zod';
 import { router, protectedProcedure } from '../trpc';
+import { env } from '@/env/server.mjs';
+import { type Stripe } from 'stripe';
+
+// eslint-disable-next-line
+const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
 
 export const userRouter = router({
   listUsers: protectedProcedure.query(
@@ -26,10 +31,20 @@ export const userRouter = router({
         password: z.string(),
       })
     )
-    .mutation(
-      async ({ ctx: { prisma }, input }) =>
-        await prisma.user.create({ data: input })
-    ),
+    .mutation(async ({ ctx: { prisma }, input }) => {
+      const account = await stripe.accounts.create({
+        type: 'express',
+        email: input.email,
+      });
+
+      const accountOnBoarding = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: 'http://localhost:3000?refresh=true',
+        return_url: 'http://localhost:3000?return=true',
+        type: 'account_onboarding',
+      });
+      return await prisma.user.create({ data: input });
+    }),
   updateUser: protectedProcedure
     .input(
       z.object({
