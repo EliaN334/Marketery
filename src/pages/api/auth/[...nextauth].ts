@@ -1,11 +1,17 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth';
+import NextAuth, { User, type NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
-import { env } from '../../../env/server.mjs';
-import { prisma } from '../../../server/db/client';
+import { env } from '@/env/server.mjs';
 import { UserProvider, UserRole } from '@/types/global';
+import type Stripe from 'stripe';
+import { prisma } from '@/server/db/client';
+import { TRPCError } from '@trpc/server';
+
+// eslint-disable-next-line
+const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -17,6 +23,7 @@ export const authOptions: NextAuthOptions = {
         session.user.full_name = user.full_name;
         session.user.role = user.role;
         session.user.image = user.image;
+        session.user.account_id = user.account_id;
       }
       return session;
     },
@@ -26,7 +33,11 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-      profile(profile) {
+      async profile(profile) {
+        const { id } = await stripe.accounts.create({
+          type: 'express',
+          email: profile.email,
+        });
         return {
           id: profile.id.toString(),
           email: profile.email,
@@ -40,7 +51,31 @@ export const authOptions: NextAuthOptions = {
           },
           provider: UserProvider.GITHUB,
           role: UserRole.USER,
+          account_id: id,
         };
+      },
+    }),
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', placeholder: 'Email' },
+        password: { label: 'Password', placeholder: 'Password' },
+      },
+      async authorize(credentials) {
+        // eslint-disable-next-line
+        const { email, password } = credentials!;
+
+        const user = await prisma.user.findFirst({
+          where: { email, password },
+        });
+        switch (user?.provider) {
+          case 'GITHUB':
+            throw new Error('This email is already used');
+          case 'DEFAULT':
+            return user as User;
+          default:
+            throw new Error('Something went wrong');
+        }
       },
     }),
   ],

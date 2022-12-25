@@ -15,6 +15,7 @@ declare module 'next-auth' {
       url: string;
       public_id: string | undefined | null;
     };
+    account_id: string;
     role: UserRole;
     provider: UserProvider;
   }

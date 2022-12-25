@@ -66,6 +66,7 @@ model User {
   password      String?
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
+  account_id    String
   products      Product[]
   cart_items    CartItem[]
   accounts      Account[]
