@@ -1,14 +1,12 @@
-import NextAuth, { User, type NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import NextAuth, { type User, type NextAuthOptions } from 'next-auth';
+import type Stripe from 'stripe';
 
 import { env } from '@/env/server.mjs';
-import { UserProvider, UserRole } from '@/types/global';
-import type Stripe from 'stripe';
 import { prisma } from '@/server/db/client';
-import { TRPCError } from '@trpc/server';
 
 // eslint-disable-next-line
 const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
@@ -49,8 +47,8 @@ export const authOptions: NextAuthOptions = {
             url: profile.avatar_url,
             public_id: null,
           },
-          provider: UserProvider.GITHUB,
-          role: UserRole.USER,
+          provider: 'GITHUB',
+          role: 'USER',
           account_id: id,
         };
       },

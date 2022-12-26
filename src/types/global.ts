@@ -1,12 +1,17 @@
-export enum UserRole {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
-}
+const USER_ROLE = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;
 
-export enum UserProvider {
-  GITHUB = 'GITHUB',
-  DEFAULT = 'DEFAULT',
-}
+const USER_PROVIDER = {
+  GITHUB: 'GITHUB',
+  DEFAULT: 'DEFAULT',
+} as const;
+
+type ObjectValues<T> = T[keyof T];
+
+export type UserRole = ObjectValues<typeof USER_ROLE>;
+export type UserProvider = ObjectValues<typeof USER_PROVIDER>;
 
 export type RequestBodyData = {
   products: {
