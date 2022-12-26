@@ -95,7 +95,6 @@ export const userRouter = router({
         type: 'express',
         email: input.email,
       });
-
       const accountOnBoarding = await stripe.accountLinks.create({
         account: account.id,
         refresh_url: 'http://localhost:3000?refresh=true',

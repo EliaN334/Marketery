@@ -3,8 +3,9 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
 import { trpc } from '@/utils/trpc';
-import { useRouter } from 'next/router';
 import { type RequestBodyData } from '@/types/global';
+import axios from 'axios'
+import getStripe from '@/utils/get-stripe';
 
 type FormValues = {
   first_name: string;
@@ -14,6 +15,7 @@ type FormValues = {
   email_signin: string;
   password_signin: string;
 };
+
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -37,6 +39,17 @@ const Home: NextPage = () => {
       console.error(e);
     }
   };
+
+  const redirectToCheckout = async () => {
+    const data = await axios.post('/api/create-session', {
+      products: [
+        {
+          price: '',
+          quantity: 1
+        }
+      ]
+    })
+  }
   const handleCheckout = async () => {
     try {
       const data = await fetch('http://localhost:3000/api/create-session', {
@@ -77,7 +90,14 @@ const Home: NextPage = () => {
               </button>
             )}
 
-            <p>{session?.user && `Signed as ${session?.user?.email}`}</p>
+            <p>
+              {session?.user && (
+                <span>
+                  Signed as <code>{session?.user?.email}</code> <br />
+                  Account id <code>{session?.user.account_id}</code>
+                </span>
+              )}
+            </p>
           </div>
           <form
             onSubmit={handleSubmit(onSubmit)}

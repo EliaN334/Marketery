@@ -13,23 +13,14 @@ export default async function handler(
   switch (req.method) {
     case 'POST':
       try {
-        const { account_id, products } = req.body as RequestBodyData;
-        const { url } = await stripe.checkout.sessions.create({
-          line_items: products.map((product) => ({
-            price: product.price_id,
-            quantity: product.quantity,
-          })),
+        const { products } = req.body as RequestBodyData;
+        const session = await stripe.checkout.sessions.create({
+          line_items: products,
           mode: 'payment',
-          success_url: 'http://localhost:3000?success=true',
+          success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: 'http://localhost:3000?cancel=true',
-          payment_intent_data: {
-            application_fee_amount: 123,
-            transfer_data: {
-              destination: account_id,
-            },
-          },
         });
-        return res.status(200).json({ url });
+        return res.status(200).json(session);
       } catch (e) {
         console.error(e);
         return res.status(400).json({ error: e });

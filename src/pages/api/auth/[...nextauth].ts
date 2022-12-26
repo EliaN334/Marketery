@@ -13,17 +13,17 @@ const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        session.user.first_name = user.first_name;
-        session.user.last_name = user.last_name;
-        session.user.full_name = user.full_name;
-        session.user.role = user.role;
-        session.user.image = user.image;
-        session.user.account_id = user.account_id;
+    session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
       }
       return session;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
     },
   },
   adapter: PrismaAdapter(prisma),
@@ -32,6 +32,9 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       async profile(profile) {
+        stripe.accounts.create({
+          documents: {},
+        });
         const { id } = await stripe.accounts.create({
           type: 'express',
           email: profile.email,
@@ -56,8 +59,8 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: 'Email', placeholder: 'Email' },
-        password: { label: 'Password', placeholder: 'Password' },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         // eslint-disable-next-line
@@ -66,17 +69,32 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findFirst({
           where: { email, password },
         });
-        switch (user?.provider) {
+        if (!user) throw new Error('Incorrect email or password');
+        switch (user.provider) {
           case 'GITHUB':
             throw new Error('This email is already used');
           case 'DEFAULT':
-            return user as User;
+            return {
+              id: user.id,
+              email: user.email,
+              account_id: user.account_id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              image: user.image,
+              role: user.role,
+              full_name: user.full_name,
+              provider: user.provider,
+            };
           default:
             throw new Error('Something went wrong');
         }
       },
     }),
   ],
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60 * 24 * 30,
+  },
 };
 
 export default NextAuth(authOptions);
