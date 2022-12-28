@@ -1,10 +1,9 @@
-import { env } from '@/env/server.mjs';
 import { type NextApiRequest, type NextApiResponse } from 'next';
 import type Stripe from 'stripe';
 import { type RequestBodyData } from '@/types/global';
 
 // eslint-disable-next-line
-const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
+const stripe: Stripe = require('stripe')(process.env.STRIPE_API_SECRET);
 
 export default async function handler(
   req: NextApiRequest,

@@ -2,14 +2,13 @@ import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import NextAuth, { type User, type NextAuthOptions } from 'next-auth';
+import NextAuth, { type NextAuthOptions } from 'next-auth';
 import type Stripe from 'stripe';
 
-import { env } from '@/env/server.mjs';
 import { prisma } from '@/server/db/client';
 
 // eslint-disable-next-line
-const stripe: Stripe = require('stripe')(env.STRIPE_API_SECRET);
+const stripe: Stripe = require('stripe')(process.env.STRIPE_API_SECRET);
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -29,12 +28,9 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       async profile(profile) {
-        stripe.accounts.create({
-          documents: {},
-        });
         const { id } = await stripe.accounts.create({
           type: 'express',
           email: profile.email,

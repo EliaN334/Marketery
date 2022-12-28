@@ -3,9 +3,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
 import { trpc } from '@/utils/trpc';
-import { type RequestBodyData } from '@/types/global';
-import axios from 'axios'
-import getStripe from '@/utils/get-stripe';
+import { useRouter } from 'next/router';
 
 type FormValues = {
   first_name: string;
@@ -15,15 +13,28 @@ type FormValues = {
   email_signin: string;
   password_signin: string;
 };
-
-
 const Home: NextPage = () => {
   const { data: session } = useSession();
+  const { push } = useRouter();
   const { register, handleSubmit, reset } = useForm<FormValues>();
   const { data: users, refetch } = trpc.user.listUsers.useQuery();
-  const { mutate: createUser } = trpc.user.createUser.useMutation({
+  const { mutate: createUser, data: createUserResponse } =
+    trpc.user.createUser.useMutation({
+      onSuccess: () => refetch(),
+    });
+  const { mutate: deleteUser } = trpc.user.deleteUser.useMutation({
     onSuccess: () => refetch(),
   });
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      deleteUser({
+        id: userId,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
   const onSubmit = async (data: FormValues) => {
     try {
       createUser({
@@ -34,42 +45,11 @@ const Home: NextPage = () => {
           public_id: 'id',
         },
       });
+      console.log('client: ', createUserResponse?.onboarding_url);
+      push(createUserResponse?.onboarding_url as string);
       reset();
     } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const redirectToCheckout = async () => {
-    const data = await axios.post('/api/create-session', {
-      products: [
-        {
-          price: '',
-          quantity: 1
-        }
-      ]
-    })
-  }
-  const handleCheckout = async () => {
-    try {
-      const data = await fetch('http://localhost:3000/api/create-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          account_id: session?.user?.account_id,
-          products: [
-            {
-              price_id: 'price_1MIfRvBbkMqtnQOqTotdu6vi',
-              quantity: 1,
-            },
-          ],
-        } as RequestBodyData),
-      }).then((res) => res.json());
-      console.log(data);
-    } catch (e) {
-      console.error('CHECKOUT URL ', e);
+      console.error('create user fn ', e);
     }
   };
   return (
@@ -121,7 +101,6 @@ const Home: NextPage = () => {
             />
             <button>Create user</button>
           </form>
-          <button onClick={handleCheckout}>Checkout</button>
         </div>
         <div className='divide-y divide-gray-300 rounded-xl border border-gray-300 p-3'>
           {users?.map((user) => (
@@ -130,6 +109,9 @@ const Home: NextPage = () => {
               <div className='text-gray-500'>
                 <span>{user.email}</span> · <span>{user.role}</span>
               </div>
+              <button onClick={() => handleDeleteUser(user.id)} type='button'>
+                Delete user
+              </button>
             </div>
           ))}
         </div>
