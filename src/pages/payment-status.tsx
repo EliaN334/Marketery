@@ -1,6 +1,7 @@
-import { useStripe } from '@stripe/react-stripe-js';
+import getStripe from '@/utils/get-stripe';
+import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const PaymentStatus = () => {
   const stripe = useStripe();
@@ -31,7 +32,21 @@ const PaymentStatus = () => {
     });
   }, [stripe, query.payment_intent_client_secret]);
 
-  return message;
+  return <div>{message}</div>;
 };
 
-export default PaymentStatus;
+const Wrapper = () => {
+  const { query } = useRouter();
+  return (
+    <Elements
+      stripe={getStripe()}
+      options={{
+        clientSecret: query.payment_intent_client_secret as string,
+      }}
+    >
+      <PaymentStatus />
+    </Elements>
+  );
+};
+
+export default Wrapper;

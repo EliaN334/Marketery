@@ -1,9 +1,11 @@
+import { env } from '@/env/server.mjs';
 import { getServerAuthSession } from '@/server/common/get-server-auth-session';
 import { type NextApiResponse, type NextApiRequest } from 'next';
-import type Stripe from 'stripe';
+import Stripe from 'stripe';
 
-// eslint-disable-next-line
-const stripe: Stripe = require('stripe')(process.env.STRIPE_API_SECRET);
+const stripe = new Stripe(env.STRIPE_API_SECRET, {
+  apiVersion: '2022-11-15',
+});
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,18 +1,27 @@
+import getStripe from '@/utils/get-stripe';
 import { trpc } from '@/utils/trpc';
 import {
   PaymentElement,
   useStripe,
   useElements,
+  Elements,
 } from '@stripe/react-stripe-js';
 import { type FormEvent, useState } from 'react';
 
 const Checkout = () => {
   const { data } = trpc.user.createPaymentIntent.useQuery();
-  console.log(data?.client_secret);
-
   return (
     <div className='flex min-h-full flex-col items-center justify-center'>
-      <CheckoutForm />
+      {data?.client_secret && (
+        <Elements
+          stripe={getStripe()}
+          options={{
+            clientSecret: data?.client_secret as string,
+          }}
+        >
+          <CheckoutForm />
+        </Elements>
+      )}
     </div>
   );
 };

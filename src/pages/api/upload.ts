@@ -4,11 +4,12 @@ import { join } from 'path';
 import mime from 'mime';
 import { unlinkSync } from 'fs';
 import cloudinary from 'cloudinary';
+import { env } from '@/env/server.mjs';
 
 cloudinary.v2.config({
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: env.CLOUDINARY_API_KEY,
+  api_secret: env.CLOUDINARY_API_SECRET,
+  cloud_name: env.CLOUDINARY_CLOUD_NAME,
 });
 
 const parseForm = async (

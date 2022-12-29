@@ -1,10 +1,12 @@
+import { env } from '@/env/server.mjs';
 import deleteCldImage from '@/utils/delete-cld-image';
-import type Stripe from 'stripe';
+import Stripe from 'stripe';
 import { z } from 'zod';
 import { router, publicProcedure, protectedProcedure } from '../trpc';
 
-// eslint-disable-next-line
-const stripe: Stripe = require('stripe')(process.env.STRIPE_API_SECRET);
+const stripe = new Stripe(env.STRIPE_API_SECRET, {
+  apiVersion: '2022-11-15',
+});
 
 export const productRouter = router({
   listProducts: publicProcedure.query(
@@ -57,7 +59,7 @@ export const productRouter = router({
         images: [data.image_preview.url].concat(
           data.images.map((image) => image.url)
         ),
-        url: `${process.env.NEXTAUTH_URL}/products/${product.id}`,
+        url: `${env.NEXTAUTH_URL}/products/${product.id}`,
         id: product.id,
         default_price_data: {
           currency: 'usd',
@@ -104,7 +106,7 @@ export const productRouter = router({
         images: [args?.image_preview?.url].concat(
           args?.images?.map((image) => image.url)
         ) as string[],
-        url: `${process.env.NEXTAUTH_URL}/products/${product.id}`,
+        url: `${env.NEXTAUTH_URL}/products/${product.id}`,
       });
       return;
     }),

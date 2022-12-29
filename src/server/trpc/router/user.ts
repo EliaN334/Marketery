@@ -1,11 +1,13 @@
 import deleteCldImage from '@/utils/delete-cld-image';
 import { z } from 'zod';
 import { router, protectedProcedure } from '../trpc';
-import { type Stripe } from 'stripe';
+import { Stripe } from 'stripe';
 import { TRPCError } from '@trpc/server';
+import { env } from '@/env/server.mjs';
 
-// eslint-disable-next-line
-const stripe: Stripe = require('stripe')(process.env.STRIPE_API_SECRET);
+const stripe = new Stripe(process.env.STRIPE_API_SECRET as string, {
+  apiVersion: '2022-11-15',
+});
 
 export const userRouter = router({
   listUsers: protectedProcedure.query(
@@ -52,8 +54,8 @@ export const userRouter = router({
       });
       const accountLink = await stripe.accountLinks.create({
         account: user.account_id,
-        refresh_url: `${process.env.NEXTAUTH_URL}/api/create-account-link?account_id=${user.account_id}`,
-        return_url: `${process.env.NEXTAUTH_URL}?return=true`,
+        refresh_url: `${env.NEXTAUTH_URL}/api/create-account-link?account_id=${user.account_id}`,
+        return_url: `${env.NEXTAUTH_URL}?return=true`,
         type: 'account_onboarding',
       });
       return {
@@ -62,14 +64,14 @@ export const userRouter = router({
       };
     }),
   createPaymentIntent: protectedProcedure.query(async () => {
+    console.log('create payment intent');
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 300,
       currency: 'usd',
       automatic_payment_methods: { enabled: true },
     });
-
     return {
-      client_secret: paymentIntent.client_secret,
+      client_secret: paymentIntent?.client_secret,
     };
   }),
   updateUser: protectedProcedure
