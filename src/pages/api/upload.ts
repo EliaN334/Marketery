@@ -5,6 +5,7 @@ import mime from 'mime';
 import { unlinkSync } from 'fs';
 import cloudinary from 'cloudinary';
 import { env } from '@/env/server.mjs';
+import { getServerAuthSession } from '@/server/common/get-server-auth-session';
 
 cloudinary.v2.config({
   api_key: env.CLOUDINARY_API_KEY,
@@ -44,6 +45,13 @@ export default async function uploadFileHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await getServerAuthSession({ req, res });
+  if (!session?.user) {
+    res.status(400).json({
+      message: 'UNAUTHORIZED',
+    });
+    throw new Error('UNAUTHORIZED');
+  }
   switch (req.method) {
     case 'POST':
       const { files } = await parseForm(req);
@@ -55,7 +63,7 @@ export default async function uploadFileHandler(
           path
         );
         unlinkSync(path);
-        return res.status(200).json({
+        res.status(200).json({
           url: secure_url,
           public_id,
         });
@@ -68,7 +76,7 @@ export default async function uploadFileHandler(
         });
       }
     default:
-      return res.status(400).json({
+      res.status(400).json({
         message: 'Method not supported',
       });
   }

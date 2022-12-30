@@ -13,6 +13,7 @@ type FormValues = {
   email_signin: string;
   password_signin: string;
 };
+
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
@@ -25,7 +26,6 @@ const Home: NextPage = () => {
   const { mutate: deleteUser } = trpc.user.deleteUser.useMutation({
     onSuccess: () => refetch(),
   });
-
   const handleDeleteUser = async (userId: string) => {
     try {
       deleteUser({
@@ -107,7 +107,8 @@ const Home: NextPage = () => {
             <div className='px-3 py-2' key={user.id}>
               <span className='text-xl font-medium'>{user.full_name}</span>
               <div className='text-gray-500'>
-                <span>{user.email}</span> · <span>{user.role}</span>
+                <span>{user.email}</span> · <span>{user.role}</span> ·{' '}
+                <span>{user.account_id}</span>
               </div>
               <button onClick={() => handleDeleteUser(user.id)} type='button'>
                 Delete user

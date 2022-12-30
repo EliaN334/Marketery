@@ -63,17 +63,32 @@ export const userRouter = router({
         onboarding_url: accountLink?.url,
       };
     }),
-  createPaymentIntent: protectedProcedure.query(async () => {
-    console.log('create payment intent');
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 300,
-      currency: 'usd',
-      automatic_payment_methods: { enabled: true },
-    });
-    return {
-      client_secret: paymentIntent?.client_secret,
-    };
-  }),
+  createPaymentIntent: protectedProcedure
+    .input(
+      z.object({
+        on_belhaf_of_account_id: z.string(),
+        destination_account_id: z.string(),
+        ammount: z.number(),
+      })
+    )
+    .mutation(
+      async ({
+        input: { ammount, on_belhaf_of_account_id, destination_account_id },
+      }) => {
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: ammount,
+          currency: 'usd',
+          application_fee_amount: 200,
+          on_behalf_of: destination_account_id,
+          transfer_data: {
+            destination: destination_account_id,
+          },
+        });
+        return {
+          client_secret: paymentIntent?.client_secret,
+        };
+      }
+    ),
   updateUser: protectedProcedure
     .input(
       z.object({

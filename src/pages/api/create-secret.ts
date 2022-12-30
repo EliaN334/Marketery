@@ -17,7 +17,7 @@ export default async function handler(
       automatic_payment_methods: { enabled: true },
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       client_secret: paymentIntent.client_secret,
     });
   }
