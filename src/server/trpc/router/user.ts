@@ -66,29 +66,49 @@ export const userRouter = router({
   createPaymentIntent: protectedProcedure
     .input(
       z.object({
-        on_belhaf_of_account_id: z.string(),
-        destination_account_id: z.string(),
+        account_id: z.string(),
         ammount: z.number(),
       })
     )
-    .mutation(
-      async ({
-        input: { ammount, on_belhaf_of_account_id, destination_account_id },
-      }) => {
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount: ammount,
-          currency: 'usd',
-          application_fee_amount: 200,
-          on_behalf_of: destination_account_id,
-          transfer_data: {
-            destination: destination_account_id,
-          },
-        });
-        return {
-          client_secret: paymentIntent?.client_secret,
-        };
-      }
-    ),
+    .mutation(async ({ input: { ammount, account_id } }) => {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: ammount,
+        currency: 'usd',
+        application_fee_amount: 200,
+        on_behalf_of: account_id,
+        transfer_data: {
+          destination: account_id,
+        },
+      });
+      return {
+        client_secret: paymentIntent?.client_secret,
+      };
+    }),
+  createRefund: protectedProcedure
+    .input(
+      z.object({
+        charge_id: z.string(),
+      })
+    )
+    .mutation(async ({ input: { charge_id } }) => {
+      const refund = await stripe.refunds.create({
+        charge: charge_id,
+        reverse_transfer: true,
+        refund_application_fee: true,
+      });
+      return {
+        refund_id: refund.id,
+      };
+    }),
+  cancelRefund: protectedProcedure
+    .input(
+      z.object({
+        refund_id: z.string(),
+      })
+    )
+    .mutation(async ({ input: { refund_id } }) => {
+      await stripe.refunds.cancel(refund_id);
+    }),
   updateUser: protectedProcedure
     .input(
       z.object({

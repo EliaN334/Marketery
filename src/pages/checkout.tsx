@@ -11,7 +11,6 @@ import { useSession } from 'next-auth/react';
 import { useEffect, type FormEvent } from 'react';
 
 const Checkout = () => {
-  const { data: session } = useSession();
   return (
     <div className='flex min-h-full flex-col items-center justify-center'>
       <Elements stripe={getStripe()}>
@@ -30,14 +29,12 @@ const CheckoutForm = () => {
 
   useEffect(() => {
     createPaymentIntent({
-      ammount: 3000,
-      destination_account_id: 'acct_1MKlN8BTGLQ1ssOq',
-      on_belhaf_of_account_id: session?.user?.account_id as string,
+      ammount: 2500,
+      account_id: session?.user?.account_id as string,
     });
   }, [createPaymentIntent, session?.user?.account_id]);
 
   const handleSubmit = async (e: FormEvent) => {
-    console.log('DATA: ', data?.client_secret);
     e.preventDefault();
     if (!stripe || !elements) return;
     const result = await stripe.confirmCardPayment(

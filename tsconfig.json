@@ -18,7 +18,8 @@
       "@/env/*": ["src/env/*"],
       "@/server/*": ["src/server/*"],
       "@/types/*": ["src/types/*"],
-      "@/utils/*": ["src/utils/*"]
+      "@/utils/*": ["src/utils/*"],
+      "@/components/*": ["src/components/*"]
     },
     "incremental": true,
     "noUncheckedIndexedAccess": true
