@@ -20,15 +20,14 @@ const NavLink: React.FC<NavLinkProps> = React.forwardRef<
       className={clsx(
         className,
         isActive ? 'text-gray-800' : 'text-gray-500',
-        'relative flex items-center gap-1 text-base'
+        'flex items-center gap-1'
       )}
       ref={ref}
     >
       {isActive && (
-        <span className='inline-block h-2 w-2 rounded-full bg-tan-400' />
+        <span className='text-brown inline-block h-2 w-2 rounded-full bg-tan-400' />
       )}
       <span>{label}</span>
-      <span className='absolute block h-[1px]'></span>
     </Link>
   );
 });

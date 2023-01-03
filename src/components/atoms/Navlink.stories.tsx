@@ -5,9 +5,9 @@ export default {
   component: NavLink,
 } as Meta<typeof NavLink>;
 
-type NavLinkProps = StoryObj<typeof NavLink>;
+type StoryNavLinkProps = StoryObj<typeof NavLink>;
 
-export const Default: NavLinkProps = {
+export const Default: StoryNavLinkProps = {
   args: {
     href: '/',
     label: 'Home',

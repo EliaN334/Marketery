@@ -18,14 +18,6 @@ type ObjectValues<T> = T[keyof T];
 export type UserRole = ObjectValues<typeof USER_ROLE>;
 export type UserProvider = ObjectValues<typeof USER_PROVIDER>;
 
-export type RequestBodyData = {
-  products: {
-    price_id: string;
-    quantity: number;
-  }[];
-  account_id: string;
-};
-
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
   P,
   IP
