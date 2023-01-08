@@ -11,7 +11,7 @@ type NavLinkProps = LinkProps & {
 const NavLink: React.FC<NavLinkProps> = React.forwardRef<
   HTMLAnchorElement,
   LinkProps & NavLinkProps
->(function RefElement({ label, className = '', ...props }, ref) {
+>(function RefNavLink({ label, className = '', ...props }, ref) {
   const { pathname } = useRouter();
   const isActive = props.href == pathname;
   return (

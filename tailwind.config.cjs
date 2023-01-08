@@ -32,6 +32,9 @@ module.exports = {
           800: '#743D3D',
           900: '#68393B'
         }
+      },
+      transitionTimingFunction: {
+        bounce: 'cubic-bezier(.7,-0.33,.36,1.33)'
       }
     },
   },

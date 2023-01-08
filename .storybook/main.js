@@ -18,7 +18,12 @@ module.exports = {
     }
   },
   core: {
-    builder: "@storybook/builder-webpack5"
+    builder: {
+      name: "@storybook/builder-webpack5",
+      options: {
+        fsCache: true
+      }
+    }
   },
   webpackFinal: async config => {
     config.module.rules.push({

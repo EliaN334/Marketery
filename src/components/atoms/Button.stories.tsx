@@ -10,5 +10,13 @@ type StoryButtonProps = StoryObj<typeof Button>;
 export const Default: StoryButtonProps = {
   args: {
     label: 'Button example',
+    variant: 'primary',
+  },
+};
+
+export const SecondaryVariant: StoryButtonProps = {
+  args: {
+    label: 'Button secondary',
+    variant: 'secondary',
   },
 };
