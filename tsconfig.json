@@ -19,7 +19,8 @@
       "@/server/*": ["src/server/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/components/*": ["src/components/*"]
+      "@/components/*": ["src/components/*"],
+      "@/public/*": ["public/*"]
     },
     "incremental": true,
     "noUncheckedIndexedAccess": true

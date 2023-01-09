@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@/components/atoms';
+import { GlobeAmericasIcon } from '@heroicons/react/24/outline';
 
 export default {
   component: Button,
@@ -37,5 +38,48 @@ export const ButtonLinkSecondaryVariant: StoryButtonProps = {
     isLink: true,
     href: '/',
     isExternal: true,
+  },
+};
+
+export const ButtonWithIconNoLabel: StoryButtonProps = {
+  args: {
+    icon: {
+      el: GlobeAmericasIcon,
+      onlyIcon: true,
+    },
+    variant: 'primary',
+  },
+};
+
+export const ButtonWithIconRight: StoryButtonProps = {
+  args: {
+    label: 'Button with icon right',
+    icon: {
+      el: GlobeAmericasIcon,
+      direcction: 'right',
+    },
+    variant: 'primary',
+  },
+};
+
+export const ButtonWithIconLeft: StoryButtonProps = {
+  args: {
+    label: 'Button with icon left',
+    icon: {
+      el: GlobeAmericasIcon,
+      direcction: 'left',
+    },
+    variant: 'primary',
+  },
+};
+
+export const ButtonWithIconLeftSecondary: StoryButtonProps = {
+  args: {
+    label: 'Button with icon left',
+    icon: {
+      el: GlobeAmericasIcon,
+      direcction: 'left',
+    },
+    variant: 'secondary',
   },
 };

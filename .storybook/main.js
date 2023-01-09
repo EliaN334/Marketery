@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  staticDirs: ['../public'],
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions",
     {
@@ -38,6 +39,12 @@ module.exports = {
       }],
       include: path.resolve(__dirname, '../')
     });
+
+    config.module.rules.push({
+      test: /\.(jpg|png|webp|jpeg)$/i,
+      type: 'asset/resource'
+    });
+
     return config;
   },
   features: {
