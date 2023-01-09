@@ -20,3 +20,22 @@ export const SecondaryVariant: StoryButtonProps = {
     variant: 'secondary',
   },
 };
+
+export const ButtonLink: StoryButtonProps = {
+  args: {
+    label: 'Button link',
+    variant: 'primary',
+    isLink: true,
+    href: '/',
+  },
+};
+
+export const ButtonLinkSecondaryVariant: StoryButtonProps = {
+  args: {
+    label: 'Button link',
+    variant: 'secondary',
+    isLink: true,
+    href: '/',
+    isExternal: true,
+  },
+};
