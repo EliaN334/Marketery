@@ -19,13 +19,15 @@ const NavLink: React.FC<NavLinkProps> = React.forwardRef<
       {...props}
       className={clsx(
         className,
-        isActive ? 'text-gray-800' : 'text-gray-500',
-        'flex items-center gap-1'
+        isActive
+          ? 'text-gray-800 hover:font-semibold hover:text-gray-900'
+          : 'text-gray-500 hover:font-semibold hover:text-gray-600',
+        'group flex items-center gap-1'
       )}
       ref={ref}
     >
       {isActive && (
-        <span className='text-brown inline-block h-2 w-2 rounded-full bg-tan-400' />
+        <span className='inline-block h-2 w-2 rounded-full bg-tan-400' />
       )}
       <span>{label}</span>
     </Link>

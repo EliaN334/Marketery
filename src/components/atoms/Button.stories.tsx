@@ -43,10 +43,8 @@ export const ButtonLinkSecondaryVariant: StoryButtonProps = {
 
 export const ButtonWithIconNoLabel: StoryButtonProps = {
   args: {
-    icon: {
-      el: GlobeAmericasIcon,
-      onlyIcon: true,
-    },
+    icon: GlobeAmericasIcon,
+    onlyIcon: true,
     variant: 'primary',
   },
 };
@@ -54,10 +52,8 @@ export const ButtonWithIconNoLabel: StoryButtonProps = {
 export const ButtonWithIconRight: StoryButtonProps = {
   args: {
     label: 'Button with icon right',
-    icon: {
-      el: GlobeAmericasIcon,
-      direcction: 'right',
-    },
+    icon: GlobeAmericasIcon,
+    iconDirecction: 'right',
     variant: 'primary',
   },
 };
@@ -65,10 +61,8 @@ export const ButtonWithIconRight: StoryButtonProps = {
 export const ButtonWithIconLeft: StoryButtonProps = {
   args: {
     label: 'Button with icon left',
-    icon: {
-      el: GlobeAmericasIcon,
-      direcction: 'left',
-    },
+    icon: GlobeAmericasIcon,
+    iconDirecction: 'left',
     variant: 'primary',
   },
 };
@@ -76,10 +70,19 @@ export const ButtonWithIconLeft: StoryButtonProps = {
 export const ButtonWithIconLeftSecondary: StoryButtonProps = {
   args: {
     label: 'Button with icon left',
-    icon: {
-      el: GlobeAmericasIcon,
-      direcction: 'left',
-    },
+    icon: GlobeAmericasIcon,
+    iconDirecction: 'left',
     variant: 'secondary',
+  },
+};
+
+export const ButtonWithoutLabel: StoryButtonProps = {
+  args: {
+    label: 'Button with icon left',
+    icon: GlobeAmericasIcon,
+    iconDirecction: 'left',
+    variant: 'secondary',
+    showLabel: false,
+    isLink: false,
   },
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import Link from 'next/link';
 
 type LogoProps = {
   size?: 'sm' | 'md';
@@ -9,15 +10,19 @@ const Logo: React.FC<React.SVGAttributes<SVGElement> & LogoProps> = ({
   size = 'md',
   ...props
 }) => {
-  return size == 'sm' ? (
-    <LogoImage {...props} />
-  ) : (
-    <div className='inline-flex items-center gap-1'>
-      <LogoImage />
-      <span className='font-pt-sans-narrow text-3xl font-bold text-gray-600'>
-        MARKETERY
-      </span>
-    </div>
+  return (
+    <Link href='/'>
+      {size == 'sm' ? (
+        <LogoImage {...props} />
+      ) : (
+        <div className='inline-flex items-center gap-1'>
+          <LogoImage />
+          <span className='font-pt-sans-narrow text-3xl font-bold text-gray-600'>
+            MARKETERY
+          </span>
+        </div>
+      )}
+    </Link>
   );
 };
 

@@ -5,7 +5,7 @@ export type HeaderTwoProps = Header & {
 };
 
 const HeaderTwo: React.FC<HeaderTwoProps> = ({ label }) => {
-  return <h2 className='font-pt-sans-narrow text-2xl md:text-3xl'>{label}</h2>;
+  return <h2 className='font-pt-sans-narrow'>{label}</h2>;
 };
 
 export default HeaderTwo;

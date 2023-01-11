@@ -7,7 +7,7 @@ export type HeaderOneProps = Header & {
 
 const HeaderOne: React.FC<HeaderOneProps> = ({ label, highLightedWord }) => {
   return (
-    <h1 className='flex items-center gap-1 font-pt-sans-narrow text-3xl font-bold md:text-4xl'>
+    <h1 className='flex items-center gap-1 font-pt-sans-narrow font-bold'>
       <span className='text-gray-900'>{label}</span>
       <span className='inline-block bg-tan-200 px-1 text-tan-500'>
         {highLightedWord}
