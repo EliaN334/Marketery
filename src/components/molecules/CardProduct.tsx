@@ -27,10 +27,10 @@ const CardProduct: React.FC<CardProductProps> = ({
           src={image}
           alt={name}
           fill
-          className='transform object-cover transition-transform duration-300 ease-out hover:scale-105'
+          className='transform object-cover transition-transform duration-500 ease-out hover:scale-105'
         />
       </Link>
-      <div className='p-5'>
+      <div className='px-5 pb-5 pt-3'>
         <h3 className='truncate'>{name}</h3>
         <p className='text-sm text-gray-500'>{description}</p>
         <div className='mt-5 flex gap-2'>

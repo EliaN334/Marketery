@@ -3,38 +3,50 @@ import clsx from 'clsx';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  icon?: {
-    el?: React.FC<{ className?: string }>;
-    /**
-     * @defaultValue `right`
-     */
-    direcction?: 'left' | 'right';
-    clickable?: boolean;
-    action?: () => void;
-    /**
-     * When `el` component is clicked will toggle to `changeTo` component
-     */
-    changeTo?: React.FC<{ className?: string }>;
-  };
+  icon?: React.FC<{ className?: string }>;
+  /**
+   * @defaultValue `right`
+   */
+  direcction?: 'left' | 'right';
+  clickable?: boolean;
+  action?: () => void;
+  /**
+   * When `icon` component is clicked will toggle to `changeTo` component
+   */
+  changeTo?: React.FC<{ className?: string }>;
   error?: string;
+  listBox?: boolean;
 };
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
-  function RefInput({ label, icon, className = '', error, ...props }, ref) {
+  function RefInput(
+    {
+      label,
+      icon: Icon,
+      className = '',
+      direcction = 'right',
+      clickable = false,
+      action,
+      changeTo: ChangeTo,
+      error,
+      ...props
+    },
+    ref
+  ) {
     const [toggleIcon, setToggleIcon] = useState(true);
     const iconContainerClasses = 'flex items-center justify-center';
     const iconElementClasses = 'h-5 w-5 text-gray-500';
-    const styledIcon = icon?.el ? (
-      icon?.clickable ? (
+    const styledIcon = Icon ? (
+      clickable ? (
         <button
           onClick={
-            icon?.changeTo
+            ChangeTo
               ? () => {
                   setToggleIcon((prev) => !prev);
-                  icon?.action && icon.action();
+                  action && action();
                 }
-              : icon?.action
-              ? () => icon.action?.()
+              : action
+              ? () => action?.()
               : undefined
           }
           type='button'
@@ -43,21 +55,19 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
             'mx-2 h-8 w-8 rounded-full transition-colors hover:bg-gray-200/70'
           )}
         >
-          {icon?.changeTo ? (
+          {ChangeTo ? (
             toggleIcon ? (
-              <icon.el className={iconElementClasses} />
+              <Icon className={iconElementClasses} />
             ) : (
-              <icon.changeTo className={iconElementClasses} />
+              <ChangeTo className={iconElementClasses} />
             )
           ) : (
-            <icon.el className={iconElementClasses} />
+            <Icon className={iconElementClasses} />
           )}
         </button>
       ) : (
         <div className={clsx(iconContainerClasses, ' h-10 w-10')}>
-          <icon.el
-            className={clsx(iconElementClasses, 'pointer-events-none')}
-          />
+          <Icon className={clsx(iconElementClasses, 'pointer-events-none')} />
         </div>
       )
     ) : null;
@@ -71,7 +81,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
               : 'ring-gray-200 focus-within:ring-tan-400 [&:hover:not(:focus-within)]:ring-gray-300'
           )}
         >
-          {icon?.el && icon?.direcction == 'left' && styledIcon}
+          {Icon && direcction == 'left' && styledIcon}
           <div className='flex flex-col'>
             <input
               {...props}
@@ -79,8 +89,8 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
               id={label.toLowerCase()}
               className={clsx(
                 className,
-                icon?.el && icon?.direcction == 'right' ? 'pl-3' : 'pr-3',
-                !icon?.el && 'px-3',
+                Icon && direcction == 'right' ? 'pl-3' : 'pr-3',
+                !Icon && 'px-3',
                 'peer h-10 bg-transparent text-gray-700 outline-none placeholder:text-transparent'
               )}
               placeholder={label}
@@ -88,26 +98,19 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
             <label
               className={clsx(
                 'pointer-events-none absolute -top-2 left-3 bg-white px-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:left-3 peer-focus:px-3 peer-focus:text-xs',
-                icon?.direcction == 'left' && 'peer-placeholder-shown:left-10'
+                direcction == 'left' && 'peer-placeholder-shown:left-10'
               )}
               htmlFor={label.toLowerCase()}
             >
               {label}
             </label>
           </div>
-          {icon?.el && icon?.direcction == 'right' && styledIcon}
+          {Icon && direcction == 'right' && styledIcon}
         </div>
         {error && <div className='text-sm text-red-500'>{error}</div>}
       </>
     );
   }
 );
-
-Input.defaultProps = {
-  icon: {
-    direcction: 'right',
-    clickable: false,
-  },
-};
 
 export default Input;

@@ -18,10 +18,7 @@ const Anchor: React.FC<AnchorProps> = ({
     <Link
       {...props}
       {...(isExternal && { target: '_blank', rel: 'noopener' })}
-      className={clsx(
-        className,
-        'text-gray-700 decoration-gray-700 hover:underline'
-      )}
+      className={clsx(className, 'text-gray-500 hover:underline')}
     >
       {label}
     </Link>

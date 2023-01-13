@@ -4,16 +4,14 @@ import Link from 'next/link';
 
 type LogoProps = {
   size?: 'sm' | 'md';
+  className?: string;
 };
 
-const Logo: React.FC<React.SVGAttributes<SVGElement> & LogoProps> = ({
-  size = 'md',
-  ...props
-}) => {
+const Logo: React.FC<LogoProps> = ({ size = 'md', className = '' }) => {
   return (
-    <Link href='/'>
+    <Link className={clsx(className)} href='/'>
       {size == 'sm' ? (
-        <LogoImage {...props} />
+        <LogoImage />
       ) : (
         <div className='inline-flex items-center gap-1'>
           <LogoImage />

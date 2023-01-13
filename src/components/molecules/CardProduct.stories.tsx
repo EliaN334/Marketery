@@ -12,8 +12,7 @@ type StoryCardProductProps = StoryObj<typeof CardProduct>;
 export const Default: StoryCardProductProps = {
   args: {
     name: 'White T-shirt',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a dolor hendrerit, maximus est non, rhoncus tortor.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/tshirt-example.jpg',
     id: uniqueId(),
   },

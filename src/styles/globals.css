@@ -16,3 +16,24 @@
     @apply text-lg md:text-xl;
   }
 }
+
+@layer components {
+  .input {
+    @apply relative inline-flex items-center rounded bg-gray-50 ring-1 transition-[box-shadow] duration-300 ease-out focus-within:ring-2;
+  }
+  .input--has-error {
+    @apply ring-red-400 focus-within:ring-red-500 [&:hover:not(:focus-within)]:ring-red-500;
+  }
+  .input--default {
+    @apply ring-gray-200 focus-within:ring-tan-400 [&:hover:not(:focus-within)]:ring-gray-300;
+  }
+  .input__element {
+    @apply peer h-10 bg-transparent text-gray-700 outline-none placeholder:text-transparent;
+  }
+  .input__label {
+    @apply pointer-events-none absolute -top-2 left-3 bg-white px-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:left-3 peer-focus:px-3 peer-focus:text-xs;
+  }
+  .input__error {
+    @apply text-sm text-red-500;
+  }
+}
