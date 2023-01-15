@@ -46,20 +46,34 @@ const Footer: React.FC = () => {
         </ul>
       </div>
 
-      <div className='flex gap-7'>
+      <div className='mt-5 flex gap-7'>
         {footerLinks.map(({ links, title }) => (
           <ul key={title}>
-            <p className='text-lg font-semibold'>{title}</p>
+            <p className='text-lg font-medium'>{title}</p>
             {links.map(({ href, label }) => (
-              <li key={label}>
+              <li className='mt-1.5' key={label}>
                 <Anchor label={label} href={href} />
               </li>
             ))}
           </ul>
         ))}
         <ul>
-          <p>Language & Currency</p>
-          <Input label='English' icon={ChevronDownIcon} />
+          <p className='text-lg font-medium'>Language & Currency</p>
+          <Input
+            listBox
+            options={[
+              {
+                name: 'English',
+                value: 'en',
+              },
+              {
+                name: 'Español',
+                value: 'es',
+              },
+            ]}
+            label='Language'
+            icon={ChevronDownIcon}
+          />
         </ul>
       </div>
     </footer>

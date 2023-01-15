@@ -1,19 +1,18 @@
 import React, { Fragment } from 'react';
 import { Button, Logo, NavLink } from '@/components/atoms';
 import { links } from '@/utils/links';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { ArrowLongRightIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
-import type { NavLinkProps } from '../atoms/NavLink';
 import Link from 'next/link';
 import clsx from 'clsx';
 
 const Navbar: React.FC = () => {
   return (
-    <header className='py-5'>
+    <header className='relative py-5'>
       <nav className='flex w-full max-w-7xl items-center justify-between gap-3 px-5 md:px-16'>
         <Logo className='hidden md:inline' />
         <Logo size='sm' className='md:hidden' />
-        <div className='relative md:hidden'>
+        <div className='md:hidden'>
           <Menu>
             <Menu.Button
               as={Button}
@@ -31,15 +30,30 @@ const Navbar: React.FC = () => {
               leaveFrom='transform opacity-100 scale-100'
               leaveTo='transform opacity-0 scale-95'
             >
-              <Menu.Items className='absolute right-0 mt-2 flex origin-top-right flex-col divide-y divide-gray-100 overflow-hidden rounded border border-gray-200'>
-                {links.map(({ href, label }) => (
+              <Menu.Items className='absolute inset-x-0 mt-2 grid origin-top-right grid-cols-1 overflow-hidden rounded border border-gray-100 sm:grid-cols-2'>
+                {links.map(({ href, label, icon }) => (
                   <Menu.Item key={label}>
                     {({ active }) => (
-                      <MenuNavLink
-                        className={clsx(active && 'bg-tan-400 text-white')}
+                      <Link
                         href={href}
-                        label={label}
-                      />
+                        className={clsx(
+                          'flex items-center gap-5 rounded-md p-5',
+                          active ? 'bg-gray-100 text-gray-600' : 'text-gray-500'
+                        )}
+                      >
+                        <div
+                          className={clsx(
+                            'rounded p-2',
+                            active
+                              ? 'bg-gray-200 text-gray-600'
+                              : 'text-gray-500'
+                          )}
+                        >
+                          {icon}
+                        </div>
+                        <span className='text-lg font-medium'>{label}</span>
+                        <ArrowLongRightIcon className='ml-auto h-4 w-4' />
+                      </Link>
                     )}
                   </Menu.Item>
                 ))}
@@ -66,23 +80,6 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
     </header>
-  );
-};
-
-const MenuNavLink: React.FC<NavLinkProps> = ({
-  href,
-  label,
-  className,
-  ...props
-}) => {
-  return (
-    <Link
-      {...props}
-      className={clsx('whitespace-nowrap px-5 py-2 text-gray-700', className)}
-      href={href}
-    >
-      {label}
-    </Link>
   );
 };
 

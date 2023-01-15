@@ -28,20 +28,16 @@ export const Password: StoryInputProps = {
 export const WithIconRight: StoryInputProps = {
   args: {
     label: 'Input with icon',
-    icon: {
-      el: MagnifyingGlassIcon,
-      direcction: 'right',
-    },
+    icon: MagnifyingGlassIcon,
+    direcction: 'right',
   },
 };
 
 export const WithIconLeft: StoryInputProps = {
   args: {
     label: 'Input with icon',
-    icon: {
-      el: MagnifyingGlassIcon,
-      direcction: 'left',
-    },
+    icon: MagnifyingGlassIcon,
+    direcction: 'left',
   },
 };
 
@@ -49,35 +45,73 @@ export const WithIconAndError: StoryInputProps = {
   args: {
     label: 'Input with error',
     error: 'This field is required',
-    icon: {
-      el: MagnifyingGlassIcon,
-      direcction: 'right',
-    },
+    icon: MagnifyingGlassIcon,
+    direcction: 'right',
   },
 };
 
 export const WithClickableIcon: StoryInputProps = {
   args: {
     label: 'Input with icon button',
-    icon: {
-      el: EyeIcon,
-      direcction: 'right',
-      clickable: true,
-      action: () => console.count('clicked: '),
-    },
+    icon: MagnifyingGlassIcon,
+    direcction: 'right',
+    clickable: true,
+    action: () => console.count('clicked: '),
   },
 };
 
 export const WithToggleIcon: StoryInputProps = {
   args: {
-    label: 'Input with icon button',
-    icon: {
-      el: EyeIcon,
-      direcction: 'right',
-      clickable: true,
-      changeTo: EyeSlashIcon,
-      action: () => console.count('clicked: '),
-    },
+    label: 'Input with toggle button',
+    icon: EyeIcon,
+    direcction: 'right',
+    clickable: true,
+    changeTo: EyeSlashIcon,
+    action: () => console.count('clicked: '),
     type: 'password',
+  },
+};
+
+export const ListBoxInput: StoryInputProps = {
+  args: {
+    label: 'ListBox Input',
+    listBox: true,
+    options: [
+      {
+        name: 'Option 1',
+        value: 'Option 1',
+      },
+      {
+        name: 'Option 2',
+        value: 'Option 2',
+      },
+      {
+        name: 'Option 3',
+        value: 'Option 3',
+      },
+    ],
+  },
+};
+
+export const ListBoxInputWithIcon: StoryInputProps = {
+  args: {
+    label: 'ListBox Input',
+    listBox: true,
+    icon: MagnifyingGlassIcon,
+    direcction: 'right',
+    options: [
+      {
+        name: 'Option 1',
+        value: 'Option 1',
+      },
+      {
+        name: 'Option 2',
+        value: 'Option 2',
+      },
+      {
+        name: 'Option 3',
+        value: 'Option 3',
+      },
+    ],
   },
 };

@@ -27,13 +27,16 @@
   .input--default {
     @apply ring-gray-200 focus-within:ring-tan-400 [&:hover:not(:focus-within)]:ring-gray-300;
   }
-  .input__element {
-    @apply peer h-10 bg-transparent text-gray-700 outline-none placeholder:text-transparent;
-  }
-  .input__label {
-    @apply pointer-events-none absolute -top-2 left-3 bg-white px-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:left-3 peer-focus:px-3 peer-focus:text-xs;
-  }
   .input__error {
     @apply text-sm text-red-500;
+  }
+  .input [data-icon-dir='right'] {
+    @apply pl-3;
+  }
+  .input [data-icon-dir='left'] {
+    @apply pr-3;
+  }
+  .input [data-no-icon='true'] {
+    @apply px-3;
   }
 }
