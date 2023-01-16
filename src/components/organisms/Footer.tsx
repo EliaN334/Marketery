@@ -6,7 +6,11 @@ import {
   TikTokIcon,
 } from '@/components/atoms/socialIcons';
 import { footerLinks } from '@/utils/footerLinks';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import {
+  ChevronDownIcon,
+  CurrencyDollarIcon,
+  EnvelopeIcon,
+} from '@heroicons/react/24/outline';
 
 const icons = [
   {
@@ -26,55 +30,103 @@ const icons = [
 const Footer: React.FC = () => {
   return (
     <footer className='px-16 py-5'>
-      <div>
-        <Logo />
-        <p className='text-gray-500'>
-          © {new Date().getFullYear()} Marketery. All rights reserved
-        </p>
+      <div className='flex flex-col justify-between md:flex-row'>
+        <div>
+          <Logo />
+          <p className='text-gray-500'>
+            © {new Date().getFullYear()} Marketery. All rights reserved
+          </p>
 
-        <ul className='mt-5 flex gap-3'>
-          {icons.map(({ icon, href }) => (
-            <li
-              className='inline-block rounded-full fill-gray-500 p-1 transition-colors hover:bg-gray-100'
-              key={href}
-            >
-              <a href={href} target='_blank' rel='noopener noreferrer'>
-                {icon}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className='mt-5 flex gap-7'>
-        {footerLinks.map(({ links, title }) => (
-          <ul key={title}>
-            <p className='text-lg font-medium'>{title}</p>
-            {links.map(({ href, label }) => (
-              <li className='mt-1.5' key={label}>
-                <Anchor label={label} href={href} />
+          <ul className='mt-5 flex gap-1'>
+            {icons.map(({ icon, href }) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  target='_blank'
+                  className='inline-block rounded-full fill-gray-500 p-3 transition-colors hover:bg-gray-100'
+                  rel='noopener noreferrer'
+                >
+                  {icon}
+                </a>
               </li>
             ))}
           </ul>
-        ))}
-        <ul>
-          <p className='text-lg font-medium'>Language & Currency</p>
-          <Input
-            listBox
-            options={[
-              {
+        </div>
+
+        <div className='mt-5 flex flex-wrap justify-between gap-7 md:flex-nowrap md:gap-12 lg:gap-20'>
+          {footerLinks.map(({ links, title }) => (
+            <ul key={title}>
+              <p className='text-lg font-medium text-gray-900'>{title}</p>
+              {links.map(({ href, label }) => (
+                <li className='mt-1.5' key={label}>
+                  <Anchor label={label} href={href} />
+                </li>
+              ))}
+            </ul>
+          ))}
+          <ul className='flex flex-col'>
+            <p className='mb-1.5 text-lg font-medium text-gray-900'>
+              Language & Currency
+            </p>
+            <Input
+              listBox
+              listBoxDefaultValue={{
                 name: 'English',
                 value: 'en',
-              },
-              {
-                name: 'Español',
-                value: 'es',
-              },
-            ]}
-            label='Language'
-            icon={ChevronDownIcon}
-          />
-        </ul>
+              }}
+              options={[
+                {
+                  name: 'English',
+                  value: 'en',
+                },
+                {
+                  name: 'Español',
+                  value: 'es',
+                },
+              ]}
+              label='Language'
+              icon={ChevronDownIcon}
+            />
+            <Input
+              className='mt-4'
+              listBox
+              listBoxDefaultValue={{
+                name: 'USD',
+                value: 'usd',
+              }}
+              options={[
+                {
+                  name: 'USD',
+                  value: 'usd',
+                },
+                {
+                  name: 'CAD',
+                  value: 'cad',
+                },
+                {
+                  name: 'EU',
+                  value: 'EU',
+                },
+              ]}
+              label='Currency'
+              icon={CurrencyDollarIcon}
+            />
+          </ul>
+        </div>
+      </div>
+      <hr className='my-7 bg-gray-300' />
+      <div className='flex flex-col items-center justify-between gap-3 sm:flex-row'>
+        <p className='text-sm text-gray-500'>
+          Ut metus enim, convallis sed augue tristique, <br /> vehicula
+          vestibulum nisl.
+        </p>
+        <Input
+          label='Subscribe to our newsletter'
+          type='email'
+          clickable
+          action={() => alert('Email sent')}
+          icon={EnvelopeIcon}
+        />
       </div>
     </footer>
   );

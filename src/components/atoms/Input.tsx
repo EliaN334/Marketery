@@ -19,17 +19,18 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
     error?: string;
   };
 
+type ListBoxOptions = {
+  name: string;
+  value: string | number;
+};
 type InputListbox =
   | {
       listBox?: false;
     }
   | {
       listBox?: true;
-      options: {
-        name: string;
-        value: object | string | number;
-      }[];
-      // placeholder: string;
+      listBoxDefaultValue?: ListBoxOptions;
+      options: ListBoxOptions[];
     };
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
@@ -49,7 +50,11 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     ref
   ) {
     const [toggleIcon, setToggleIcon] = useState(true);
-    const [selected, setSelected] = useState<string | null>(null);
+    const [selected, setSelected] = useState<string | undefined | null>(
+      'listBoxDefaultValue' in props
+        ? (props.listBoxDefaultValue?.value as string)
+        : null
+    );
 
     const inputElementStyle =
       'peer h-10 bg-transparent inline-block text-gray-700 outline-none placeholder:text-transparent'.trim();
@@ -97,60 +102,69 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         </div>
       )
     ) : null;
-
-    return listBox && 'options' in props ? (
-      <Listbox
-        // {...(props as unknown as typeof Listbox)}
-        as='div'
-        className={clsx(inputClasses, 'relative inline-block')}
-        value={selected}
-        onChange={setSelected}
-      >
-        <div className='flex cursor-pointer items-center'>
-          {Icon && direcction == 'left' && styledIcon}
-          <Listbox.Button
-            as='input'
-            readOnly
-            {...(!Icon && { 'data-no-icon': 'true' })}
-            {...(direcction && { 'data-icon-dir': direcction })}
-            className={inputElementStyle}
-            value={selected ? selected : undefined}
-            ref={ref}
-            placeholder={label}
-          />
-          <Listbox.Label
-            className={clsx(
-              inputLabelStyle,
-              direcction == 'left' && 'peer-placeholder-shown:left-10'
-            )}
-            placeholder={label}
-          >
-            {label}
-          </Listbox.Label>
-          {Icon && direcction == 'right' && styledIcon}
-        </div>
-        <Listbox.Options className='absolute right-0 mt-2 w-full origin-top-right divide-y divide-gray-100 overflow-auto rounded bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-          {props.options.map(({ name, value }) => (
-            <Listbox.Option
-              className={({ active, selected }) =>
-                clsx(
-                  'cursor-pointer px-4 py-2',
-                  active
-                    ? 'bg-tan-400 text-white'
-                    : selected
-                    ? 'bg-gray-100 text-gray-700'
-                    : 'text-gray-700'
-                )
+    if (listBox && 'options' in props) {
+      // eslint-disable-next-line
+      const { listBoxDefaultValue, options, ...listBoxProps } = props;
+      return (
+        <Listbox
+          as='div'
+          className={clsx(inputClasses, className, 'relative inline-block')}
+          value={selected}
+          onChange={setSelected}
+        >
+          <div className='flex cursor-pointer items-center'>
+            {Icon && direcction == 'left' && styledIcon}
+            <Listbox.Button
+              {...listBoxProps}
+              {...(!Icon && { 'data-no-icon': 'true' })}
+              {...(direcction && { 'data-icon-dir': direcction })}
+              as='input'
+              readOnly
+              className={inputElementStyle}
+              value={
+                selected
+                  ? props.options.find((opt) => opt.value == selected)?.name ??
+                    selected
+                  : undefined
               }
-              key={name}
-              value={value}
+              ref={ref}
+              placeholder={label}
+            />
+            <Listbox.Label
+              className={clsx(
+                inputLabelStyle,
+                direcction == 'left' && 'peer-placeholder-shown:left-10'
+              )}
+              placeholder={label}
             >
-              {name}
-            </Listbox.Option>
-          ))}
-        </Listbox.Options>
-      </Listbox>
-    ) : (
+              {label}
+            </Listbox.Label>
+            {Icon && direcction == 'right' && styledIcon}
+          </div>
+          <Listbox.Options className='absolute right-0 z-20 mt-1 w-full origin-top-right divide-y divide-gray-100 overflow-auto rounded bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+            {props.options.map(({ name, value }) => (
+              <Listbox.Option
+                className={({ active, selected }) =>
+                  clsx(
+                    'cursor-pointer px-4 py-2',
+                    active
+                      ? 'bg-tan-400 text-white'
+                      : selected
+                      ? 'bg-gray-100 text-gray-700'
+                      : 'text-gray-700'
+                  )
+                }
+                key={name}
+                value={value}
+              >
+                {name}
+              </Listbox.Option>
+            ))}
+          </Listbox.Options>
+        </Listbox>
+      );
+    }
+    return (
       <>
         <div className={inputClasses}>
           {Icon && direcction == 'left' && styledIcon}
@@ -161,12 +175,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
               {...(direcction && { 'data-icon-dir': direcction })}
               ref={ref}
               id={label.toLowerCase()}
-              className={clsx(
-                className,
-                // Icon && direcction == 'right' ? 'pl-3' : 'pr-3',
-                // !Icon && 'px-3',
-                inputElementStyle
-              )}
+              className={clsx(className, inputElementStyle)}
               placeholder={label}
             />
             <label
