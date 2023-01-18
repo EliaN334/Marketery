@@ -39,4 +39,17 @@
   .input [data-no-icon='true'] {
     @apply px-3;
   }
+
+  .sw-bullet {
+    @apply inline-block h-2 w-2 cursor-pointer rounded-full transition-colors;
+  }
+  .sw-bullet:not(.sw-bullet--active) {
+    @apply border-[1px] border-gray-400 bg-gray-200;
+  }
+  .sw-bullet:not(:first-of-type) {
+    @apply ml-2;
+  }
+  .sw-bullet--active {
+    @apply border-[1px] border-tan-400 bg-tan-400;
+  }
 }

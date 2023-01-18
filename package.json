@@ -39,6 +39,7 @@
     "storybook": "^7.0.0-beta.19",
     "stripe": "^11.5.0",
     "superjson": "1.9.1",
+    "swiper": "^8.4.6",
     "trpc-playground": "^1.0.1",
     "zod": "^3.18.0"
   },
