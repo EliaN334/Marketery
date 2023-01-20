@@ -35,7 +35,7 @@ const LogoImage: React.FC<React.SVGAttributes<SVGElement>> = ({
     fill='none'
     xmlns='http://www.w3.org/2000/svg'
   >
-    <g clip-path='url(#clip0_106_986)'>
+    <g clipPath='url(#clip0_106_986)'>
       <path d='M55.5 0H77.5L58.5 32H36.5L55.5 0Z' fill='#E54911' />
       <path d='M35.5 0H51.5L32.5 32H16.5L35.5 0Z' fill='#F78340' />
       <path d='M19.5 0H31.5L12.5 32H0.5L19.5 0Z' fill='#F9A362' />

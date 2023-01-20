@@ -40,16 +40,20 @@
     @apply px-3;
   }
 
-  .sw-bullet {
+  .nk-bullet {
     @apply inline-block h-2 w-2 cursor-pointer rounded-full transition-colors;
   }
-  .sw-bullet:not(.sw-bullet--active) {
+  .nk-bullet:not(.nk-bullet--active) {
     @apply border-[1px] border-gray-400 bg-gray-200;
   }
-  .sw-bullet:not(:first-of-type) {
+  .nk-bullet:not(:first-of-type) {
     @apply ml-2;
   }
-  .sw-bullet--active {
+  .nk-bullet--active {
     @apply border-[1px] border-tan-400 bg-tan-400;
+  }
+
+  .nk-btn-next {
+    @apply h-5 w-5 rounded-full bg-tan-400;
   }
 }

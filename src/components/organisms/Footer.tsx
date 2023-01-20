@@ -29,7 +29,7 @@ const icons = [
 
 const Footer: React.FC = () => {
   return (
-    <footer className='px-16 py-5'>
+    <footer className='my-5 mt-auto px-16 py-5'>
       <div className='flex flex-col justify-between md:flex-row'>
         <div>
           <Logo />

@@ -1,11 +1,10 @@
-import React from 'react';
 import { Footer, Navbar } from '../organisms';
 
 const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className='flex min-h-screen flex-col'>
+    <div className='mx-auto flex min-h-screen w-full max-w-7xl flex-col'>
       <Navbar />
-      <main>{children}</main>
+      <main className='px-16'>{children}</main>
       <Footer />
     </div>
   );

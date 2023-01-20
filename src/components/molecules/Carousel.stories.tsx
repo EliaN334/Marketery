@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Carrousel } from '.';
-import { Pagination, Navigation } from 'swiper';
+import { Carousel } from '.';
 
 export default {
-  component: Carrousel,
-} as Meta<typeof Carrousel>;
+  component: Carousel,
+} as Meta<typeof Carousel>;
 
-type StoryCarrouselProps = StoryObj<typeof Carrousel>;
+type StoryCaouselProps = StoryObj<typeof Carousel>;
 
 const images = [
   {
@@ -31,18 +30,16 @@ const images = [
   },
 ];
 
-export const Default: StoryCarrouselProps = {
+export const Default: StoryCaouselProps = {
   args: {
     images,
   },
 };
 
-export const WithModules: StoryCarrouselProps = {
+export const WithNavigationAndPagination: StoryCaouselProps = {
   args: {
     images,
-    swiperOptions: {
-      modules: [Pagination, Navigation],
-    },
-    slideClassName: 'h-72',
+    navigation: true,
+    pagination: true,
   },
 };
