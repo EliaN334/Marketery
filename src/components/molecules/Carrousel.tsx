@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import type { SwiperOptions } from 'swiper/types/swiper-options';
+import type { SwiperOptions } from 'swiper';
 import clsx from 'clsx';
 import { A11y } from 'swiper';
 import 'swiper/css/bundle';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
-type HeroCarrouselProps = {
+type CarrouselProps = {
   images: {
     url: string;
     alt: string;
@@ -16,11 +16,11 @@ type HeroCarrouselProps = {
   swiperOptions: SwiperOptions;
 };
 
-const HeroCarrousel: React.FC<HeroCarrouselProps> = ({
+const Carrousel: React.FC<CarrouselProps> = ({
   images,
   className = '',
   slideClassName = '',
-  swiperOptions: { modules = [], ...swiperOptions },
+  swiperOptions,
 }) => {
   const moduleConfig = {
     Pagination: {
@@ -33,26 +33,28 @@ const HeroCarrousel: React.FC<HeroCarrouselProps> = ({
       prevEl: '.sw-nav-btn-prev',
     },
   };
+
   return (
     <Swiper
-      // {...swiperOptions}
-      // modules={[A11y]}
-      className={clsx(className, 'relative')}
-      // {...modules.map((mdl) => {
-      //   if (Object.keys(moduleConfig).includes(mdl.name)) {
-      //     return {
-      //       // eslint-disable-next-line
-      //       // @ts-ignore
-      //       [mdl.name.toLowerCase()]: moduleConfig[mdl.name],
-      //     };
-      //   }
-      // })}
+      {...swiperOptions}
+      modules={[...(swiperOptions?.modules ?? []), A11y]}
+      {...(swiperOptions?.modules
+        ?.map((mdl) => mdl.name)
+        ?.includes('Pagination') && {
+        pagination: moduleConfig.Pagination,
+      })}
+      {...(swiperOptions?.modules
+        ?.map((mdl) => mdl.name)
+        ?.includes('Navigation') && {
+        navigation: moduleConfig.Navigation,
+      })}
+      className={clsx('relative', className)}
       spaceBetween={50}
       slidesPerView={1}
-      // a11y={{ enabled: true }}
+      a11y={{ enabled: true }}
     >
-      {/* {modules.map((mdl) =>
-        mdl.name == 'Pagination' ? (
+      {swiperOptions?.modules?.map((mdl) =>
+        mdl.name == 'Navigation' ? (
           <>
             <button className='sw-nav-btn-next absolute top-[40%] right-3 z-10 flex items-center justify-center rounded-full bg-tan-400 p-3 transition-none disabled:bg-tan-400/70'>
               <ChevronRightIcon className='h-5 w-5 text-white' />
@@ -62,7 +64,7 @@ const HeroCarrousel: React.FC<HeroCarrouselProps> = ({
             </button>
           </>
         ) : null
-      )} */}
+      )}
       {images.map(({ url, alt }) => (
         <SwiperSlide key={alt}>
           <div className={clsx('relative h-52 w-full', slideClassName)}>
@@ -74,4 +76,4 @@ const HeroCarrousel: React.FC<HeroCarrouselProps> = ({
   );
 };
 
-export default HeroCarrousel;
+export default Carrousel;

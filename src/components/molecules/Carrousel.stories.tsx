@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Carrousel } from '.';
 import { Pagination, Navigation } from 'swiper';
-import clsx from 'clsx';
 
 export default {
   component: Carrousel,
@@ -41,8 +40,9 @@ export const Default: StoryCarrouselProps = {
 export const WithModules: StoryCarrouselProps = {
   args: {
     images,
-    //  swiperOptions: {
-    //    modules: [Pagination, Navigation]
-    //  }
+    swiperOptions: {
+      modules: [Pagination, Navigation],
+    },
+    slideClassName: 'h-72',
   },
 };
