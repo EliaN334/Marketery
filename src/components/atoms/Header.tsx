@@ -1,17 +1,13 @@
-import { HeaderOne, HeaderTwo } from './Headers';
+import { type Header, HeaderOne, HeaderTwo } from './Headers';
+import type { HeaderOneProps } from './Headers/HeaderOne';
+import type { HeaderTwoProps } from './Headers/HeaderTwo';
 
-type HeaderProps = {
-  heading: 'h1' | 'h2';
-  label: string;
-  highLightedWord?: string;
-};
+type HeaderLevel = HeaderOneProps | HeaderTwoProps;
 
-const Header: React.FC<HeaderProps> = ({ heading, label, highLightedWord }) => {
-  return heading == 'h1' ? (
-    <HeaderOne label={label} highLightedWord={highLightedWord as string} />
-  ) : (
-    <HeaderTwo label={label} />
-  );
+type HeaderProps = HeaderLevel & Header;
+
+const Header: React.FC<HeaderProps> = ({ heading, ...rest }) => {
+  return heading === 'h1' ? <HeaderOne {...rest} /> : <HeaderTwo {...rest} />;
 };
 
 export default Header;

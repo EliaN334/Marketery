@@ -57,16 +57,17 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     );
 
     const inputElementStyle =
-      'peer h-10 bg-transparent inline-block text-gray-700 outline-none placeholder:text-transparent'.trim();
+      'peer h-10 bg-transparent box-content w-full inline-block text-gray-700 outline-none placeholder:text-transparent'.trim();
     const inputLabelStyle =
       'pointer-events-none absolute -top-2 left-3 bg-white px-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:px-0 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:left-3 peer-focus:px-3 peer-focus:text-xs'.trim();
     const inputClasses = clsx(
-      'input',
+      'input group',
       error ? 'input--has-error' : 'input--default',
       className
     );
 
-    const iconContainerClasses = 'flex items-center justify-center'.trim();
+    const iconContainerClasses =
+      'flex shrink-0 items-center justify-center'.trim();
     const iconElementClasses = 'h-5 w-5 text-gray-500'.trim();
     const styledIcon = Icon ? (
       clickable ? (
@@ -109,7 +110,7 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
       return (
         <Listbox
           as='div'
-          className={clsx(inputClasses, className, 'relative inline-block')}
+          className={clsx(inputClasses, 'relative inline-block')}
           value={selected}
           onChange={setSelected}
         >
@@ -190,6 +191,12 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
             </label>
           </div>
           {Icon && direcction == 'right' && styledIcon}
+          <fieldset
+            className='pointer-events-none absolute -inset-[0.06rem] -top-[0.53rem] border-separate border-spacing-3 border-0 px-3 py-0 transition-colors [border-radius:_inherit] group-focus-within:border-2 group-focus-within:border-blue-500'
+            aria-hidden='true'
+          >
+            <legend className='px-3 text-xs text-transparent'>{label}</legend>
+          </fieldset>
         </div>
         {error && <div className='input__error'>{error}</div>}
       </>

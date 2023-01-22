@@ -4,22 +4,22 @@
 
 @layer base {
   h1 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-4xl text-gray-800;
   }
   h2 {
-    @apply text-2xl md:text-3xl;
+    @apply text-2xl md:text-3xl text-gray-800;
   }
   h3 {
-    @apply text-xl md:text-2xl;
+    @apply text-xl md:text-2xl text-gray-800;
   }
   h4 {
-    @apply text-lg md:text-xl;
+    @apply text-lg md:text-xl text-gray-800;
   }
 }
 
 @layer components {
   .input {
-    @apply relative inline-flex items-center rounded bg-gray-50 ring-1 transition-[box-shadow] duration-300 ease-out focus-within:ring-2;
+    @apply relative inline-flex items-center rounded bg-gray-50 ring-1 transition-shadow duration-300 ease-out focus-within:ring-2;
   }
   .input--has-error {
     @apply ring-red-400 focus-within:ring-red-500 [&:hover:not(:focus-within)]:ring-red-500;
@@ -44,13 +44,13 @@
     @apply inline-block h-2 w-2 cursor-pointer rounded-full transition-colors;
   }
   .nk-bullet:not(.nk-bullet--active) {
-    @apply border-[1px] border-gray-400 bg-gray-200;
+    @apply bg-gray-200 ring-[1px] ring-gray-400;
   }
   .nk-bullet:not(:first-of-type) {
     @apply ml-2;
   }
   .nk-bullet--active {
-    @apply border-[1px] border-tan-400 bg-tan-400;
+    @apply bg-tan-400 ring-[1px] ring-tan-400;
   }
 
   .nk-btn-next {

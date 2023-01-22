@@ -10,14 +10,14 @@ type StoryHeaderProps = StoryObj<typeof Header>;
 export const HeadingOne: StoryHeaderProps = {
   args: {
     heading: 'h1',
-    label: 'HEADER',
-    highLightedWord: 'ONE',
+    label: 'HEADER ONE',
   },
 };
 
 export const HeaderTwo: StoryHeaderProps = {
   args: {
     heading: 'h2',
-    label: 'HEADER TWO',
+    label: 'HEADER',
+    highLightedWord: 'TWO',
   },
 };

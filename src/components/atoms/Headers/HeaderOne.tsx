@@ -1,17 +1,14 @@
-import { type Header } from '.';
+import clsx from 'clsx';
+import type { Header } from '.';
 
 export type HeaderOneProps = Header & {
   heading?: 'h1';
-  highLightedWord: string;
 };
 
-const HeaderOne: React.FC<HeaderOneProps> = ({ label, highLightedWord }) => {
+const HeaderOne: React.FC<HeaderOneProps> = ({ label, className = '' }) => {
   return (
-    <h1 className='flex items-center gap-1 font-pt-sans-narrow font-bold'>
-      <span className='text-gray-900'>{label}</span>
-      <span className='inline-block bg-tan-200 px-1 text-tan-500'>
-        {highLightedWord}
-      </span>
+    <h1 className={clsx('font-pt-sans-narrow font-bold', className)}>
+      {label}
     </h1>
   );
 };

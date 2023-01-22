@@ -11,10 +11,10 @@ const CardCategory: React.FC<CardCategoryProps> = ({ name, url, href }) => {
   return (
     <Link
       href={href}
-      className='inline-block rounded-md border border-gray-200 p-4 transition-[box-shadow] ease-out hover:shadow-lg'
+      className='inline-block rounded-md border border-gray-200 bg-white p-4 transition-[box-shadow] ease-out hover:shadow-xl'
     >
       <p className='mb-2 text-2xl text-gray-500'>{name}</p>
-      <div className='relative h-52 w-52'>
+      <div className='relative h-52 w-auto'>
         <Image
           src={url}
           fill

@@ -2,8 +2,9 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import NukaCarousel from 'nuka-carousel';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import type { CarouselProps as NukaCarouselProps } from 'nuka-carousel';
 
-type CarouselProps = {
+type CarouselProps = NukaCarouselProps & {
   images: {
     url: string;
     alt: string;
@@ -17,13 +18,14 @@ type CarouselProps = {
 const Carousel: React.FC<CarouselProps> = ({
   images,
   className = '',
-  slideClassName = '',
+  slideClassName = 'h-52',
   navigation = false,
   pagination = false,
+  ...carouselOptions
 }) => {
   return (
     <NukaCarousel
-      cellSpacing={30}
+      {...carouselOptions}
       className={clsx('relative', className)}
       renderCenterRightControls={
         navigation
@@ -89,7 +91,7 @@ const Carousel: React.FC<CarouselProps> = ({
       }
     >
       {images.map(({ url, alt }) => (
-        <div key={alt} className={clsx('relative h-52 w-full', slideClassName)}>
+        <div key={alt} className={clsx('relative w-full', slideClassName)}>
           <Image className='object-cover' src={url} alt={alt} fill />
         </div>
       ))}
