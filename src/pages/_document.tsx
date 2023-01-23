@@ -17,7 +17,7 @@ const Document = () => {
         />
       </Head>
 
-      <body className='font-pt-sans antialiased'>
+      <body className='overflow-x-clip font-pt-sans antialiased'>
         <Main />
         <NextScript />
       </body>

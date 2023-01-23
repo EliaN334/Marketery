@@ -21,7 +21,7 @@ const SectionLandingCategories: React.FC = () => {
           />
         ))}
       </div>
-      <CubesLanding className='absolute -right-20 -bottom-96 -z-10' />
+      <CubesLanding className='absolute -right-20 -bottom-96 -z-10 h-auto w-fit' />
     </section>
   );
 };

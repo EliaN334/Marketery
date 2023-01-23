@@ -3,6 +3,7 @@ import {
   SectionCarousel,
   SectionLandingCategories,
   SectionLandingGallery,
+  SectionLandingSeller,
 } from '@/components/organisms/sections';
 import type { NextPageWithLayout } from '@/types/global';
 import Head from 'next/head';
@@ -13,6 +14,7 @@ const HomePage: NextPageWithLayout = () => {
       {/* <SectionCarousel /> */}
       <SectionLandingCategories />
       <SectionLandingGallery />
+      <SectionLandingSeller />
     </div>
   );
 };

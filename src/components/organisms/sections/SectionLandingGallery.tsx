@@ -7,7 +7,7 @@ const SectionLandingGallery: React.FC = () => {
   return (
     <section className='flex flex-col items-center'>
       <Header heading='h2' label='WE HAVE FOR ALL' highLightedWord='CHOICES' />
-      <div className='mt-20 grid h-screen w-full grid-cols-2 gap-7'>
+      <div className='mt-20 grid w-full grid-cols-2 gap-7'>
         <div className='flex flex-col gap-7'>
           <div className='relative h-96'>
             <Image src={path} alt='' fill className='object-cover' />
