@@ -11,27 +11,27 @@ const iconClasses = 'h-6 w-6';
 export const links = [
   {
     href: '/',
-    label: 'Home',
+    label: 'home',
     icon: <HomeIcon className={iconClasses} />,
   },
   {
     href: '/products',
-    label: 'Products',
+    label: 'products',
     icon: <TvIcon className={iconClasses} />,
   },
   {
     href: '/daily-offers',
-    label: 'Daily offers',
+    label: 'daily-offers',
     icon: <FireIcon className={iconClasses} />,
   },
   {
     href: '/sell',
-    label: 'Sell',
+    label: 'sell',
     icon: <CurrencyDollarIcon className={iconClasses} />,
   },
   {
     href: '/about',
-    label: 'About',
+    label: 'about',
     icon: <UserGroupIcon className={iconClasses} />,
   },
 ];

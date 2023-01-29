@@ -1,7 +1,7 @@
 import { SessionProvider } from 'next-auth/react';
 import { type AppPropsWithLayout } from '@/types/global';
 import { trpc } from '@/utils/trpc';
-
+import { appWithTranslation } from 'next-i18next';
 import '../styles/globals.css';
 
 const MyApp = ({
@@ -16,4 +16,4 @@ const MyApp = ({
   );
 };
 
-export default trpc.withTRPC(MyApp);
+export default trpc.withTRPC(appWithTranslation(MyApp));

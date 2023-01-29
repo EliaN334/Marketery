@@ -5,8 +5,10 @@ import { ArrowLongRightIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 
 const Navbar: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <header className='relative py-5'>
       <nav className='flex w-full max-w-7xl items-center justify-between gap-3 px-5 md:px-16'>
@@ -30,7 +32,7 @@ const Navbar: React.FC = () => {
               leaveFrom='transform opacity-100 scale-100'
               leaveTo='transform opacity-0 scale-95'
             >
-              <Menu.Items className='absolute shadow-md inset-x-0 z-20 mt-2 grid origin-top-right grid-cols-1 overflow-hidden rounded border border-gray-100 bg-white sm:grid-cols-2'>
+              <Menu.Items className='absolute inset-x-0 z-20 mt-2 grid origin-top-right grid-cols-1 overflow-hidden rounded border border-gray-100 bg-white shadow-md sm:grid-cols-2'>
                 {links.map(({ href, label, icon }) => (
                   <Menu.Item key={label}>
                     {({ active }) => (
