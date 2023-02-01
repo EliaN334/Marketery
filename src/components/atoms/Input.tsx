@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { Listbox } from '@headlessui/react';
 
@@ -17,11 +17,14 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
      */
     changeTo?: React.FC<{ className?: string }>;
     error?: string;
+    // eslint-disable-next-line
+    onChange?: (...events: any[]) => void;
+    value?: string | number;
   };
 
-type ListBoxOptions = {
+type ListBoxOption = {
   name: string;
-  value: string | number;
+  value: string;
 };
 type InputListbox =
   | {
@@ -29,8 +32,8 @@ type InputListbox =
     }
   | {
       listBox?: true;
-      listBoxDefaultValue?: ListBoxOptions;
-      options: ListBoxOptions[];
+      options: ListBoxOption[];
+      onSelectedOption?: (value: ListBoxOption) => void;
     };
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
@@ -50,11 +53,6 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
     ref
   ) {
     const [toggleIcon, setToggleIcon] = useState(true);
-    const [selected, setSelected] = useState<string | undefined | null>(
-      'listBoxDefaultValue' in props
-        ? (props.listBoxDefaultValue?.value as string)
-        : null
-    );
 
     const inputElementStyle =
       'peer h-10 bg-transparent inline-block text-gray-700 outline-none placeholder:text-transparent'.trim();
@@ -103,32 +101,36 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
         </div>
       )
     ) : null;
+    useEffect(() => {
+      if (listBox && 'options' in props) {
+        props.onSelectedOption &&
+          props.onSelectedOption(
+            props.options.find(
+              (opt) => opt.value == props.value
+            ) as ListBoxOption
+          );
+      }
+    }, [props?.value, listBox]);
     if (listBox && 'options' in props) {
       // eslint-disable-next-line
-      const { listBoxDefaultValue, options, ...listBoxProps } = props;
+      const { options, onChange, value, onSelectedOption } = props;
+
       return (
         <Listbox
           as='div'
           className={clsx(inputClasses, className, 'relative inline-block')}
-          value={selected}
-          onChange={setSelected}
+          value={value}
+          onChange={onChange}
         >
           <div className='flex cursor-pointer items-center'>
             {Icon && direcction == 'left' && styledIcon}
             <Listbox.Button
-              {...listBoxProps}
               {...(!Icon && { 'data-no-icon': 'true' })}
               {...(direcction && { 'data-icon-dir': direcction })}
               as='input'
               readOnly
               className={inputElementStyle}
-              value={
-                selected
-                  ? props.options.find((opt) => opt.value == selected)?.name ??
-                    selected
-                  : undefined
-              }
-              ref={ref}
+              value={options.find((opt) => opt.value == value)?.name}
               placeholder={label}
             />
             <Listbox.Label

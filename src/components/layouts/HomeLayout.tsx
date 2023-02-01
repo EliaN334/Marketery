@@ -1,3 +1,5 @@
+import type { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Footer, Navbar } from '../organisms';
 
 const HomeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {

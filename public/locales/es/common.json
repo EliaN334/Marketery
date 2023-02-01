@@ -1,0 +1,26 @@
+{
+   "headers": {
+      "header-two": {
+         "home": {
+            "get-all-you-allways-wanted": {
+               "label": "OBTEN LO QUE SIEMPRE HAS",
+               "word": "QUERIDO"
+            }, 
+            "we-have-for-all-choices": {
+               "label": "TENEMOS PARA TODOS LOS",
+               "word": "GUSTOS"
+            },
+            "you-have-things-to-sell":{
+               "0": {
+                  "label": "TIENES OBJETOS PARA",
+                  "word": "VENDER?"
+               },
+               "1": {
+                  "label": "NOSOTROS TE",
+                  "word": "AYUDAMOS"
+               }
+            }
+         }
+      }
+   }
+}

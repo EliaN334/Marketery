@@ -4,18 +4,22 @@ import {
   DashboardMockup,
   DecoratorDots,
 } from '@/components/atoms/Figures';
+import { useTranslation } from 'next-i18next';
 
 const SectionLandingSeller: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'headers.header-two.home',
+  });
   return (
     <section className='relative pb-32'>
       <Header
         heading='h2'
         variant='secondary'
-        label='YOU HAVE THINGS TO'
-        highLightedWord='SELL?'
+        label={t('you-have-things-to-sell.0.label')}
+        highLightedWord={t('you-have-things-to-sell.0.word') as string}
         lineTwo={{
-          label: "WE'VE GOT YOUR",
-          word: 'BACK',
+          label: t('you-have-things-to-sell.1.label'),
+          word: t('you-have-things-to-sell.1.word'),
         }}
       />
       <p className='mt-5 text-gray-500'>

@@ -11,6 +11,8 @@ import {
   CurrencyDollarIcon,
   EnvelopeIcon,
 } from '@heroicons/react/24/outline';
+import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'next-i18next';
 
 const icons = [
   {
@@ -28,6 +30,13 @@ const icons = [
 ];
 
 const Footer: React.FC = () => {
+  const { watch, control } = useForm({
+    defaultValues: {
+      'listbox-lang': 'en',
+    },
+  });
+  const { i18n } = useTranslation();
+  console.log(watch('listbox-lang'));
   return (
     <footer className='mb-5 mt-auto px-16 py-5 pt-24'>
       <div className='flex flex-col justify-between md:flex-row'>
@@ -68,32 +77,40 @@ const Footer: React.FC = () => {
             <p className='mb-1.5 text-lg font-medium text-gray-900'>
               Language & Currency
             </p>
-            <Input
-              listBox
-              listBoxDefaultValue={{
-                name: 'English',
-                value: 'en',
-              }}
-              options={[
-                {
-                  name: 'English',
-                  value: 'en',
-                },
-                {
-                  name: 'Español',
-                  value: 'es',
-                },
-              ]}
-              label='Language'
-              icon={ChevronDownIcon}
+            <Controller
+              name='listbox-lang'
+              defaultValue='en'
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  value={value}
+                  onChange={onChange}
+                  listBox
+                  onSelectedOption={async ({ value }) => {
+                    console.log(value, ' selected now');
+                    i18n.changeLanguage('es', (err) => {
+                      if (err) console.error(err);
+                      if (!err) console.log('changed');
+                    });
+                  }}
+                  options={[
+                    {
+                      name: 'English',
+                      value: 'en',
+                    },
+                    {
+                      name: 'Español',
+                      value: 'es',
+                    },
+                  ]}
+                  label='Language'
+                  icon={ChevronDownIcon}
+                />
+              )}
             />
             <Input
               className='mt-4'
               listBox
-              listBoxDefaultValue={{
-                name: 'USD',
-                value: 'usd',
-              }}
               options={[
                 {
                   name: 'USD',

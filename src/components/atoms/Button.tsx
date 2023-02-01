@@ -3,7 +3,7 @@ import Link, { type LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
 
 type ButtonProps = ButtonLinkProps & {
-  label?: string;
+  label: string;
   /** @defaultValue `primary` */
   variant?: 'primary' | 'secondary';
   /** @defaultValue `true` */

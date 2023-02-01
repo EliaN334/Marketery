@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 
 const Navbar: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('navbar');
   return (
     <header className='relative py-5'>
       <nav className='flex w-full max-w-7xl items-center justify-between gap-3 px-5 md:px-16'>
@@ -53,7 +53,9 @@ const Navbar: React.FC = () => {
                         >
                           {icon}
                         </div>
-                        <span className='text-lg font-medium'>{label}</span>
+                        <span className='text-lg font-medium'>
+                          {t(`links.${label}`)}
+                        </span>
                         <ArrowLongRightIcon className='ml-auto h-4 w-4' />
                       </Link>
                     )}
@@ -66,15 +68,15 @@ const Navbar: React.FC = () => {
         <ul className='hidden gap-4 md:flex'>
           {links.map(({ href, label }) => (
             <li key={href}>
-              <NavLink href={href} label={label} />
+              <NavLink href={href} label={t(`links.${label}`)} />
             </li>
           ))}
         </ul>
 
         <div className='hidden gap-3 md:flex'>
-          <Button label='Sign in' isLink href='/auth/signin' />
+          <Button label={t('links.sign-in')} isLink href='/auth/signin' />
           <Button
-            label='Sign up'
+            label={t('links.sign-up')}
             variant='secondary'
             isLink
             href='/auth/signup'

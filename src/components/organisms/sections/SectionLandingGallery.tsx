@@ -1,12 +1,20 @@
 import { Header } from '@/components/atoms';
 import Image from 'next/image';
+import { useTranslation } from 'next-i18next';
 
 const path = '/images/placeholder-image.png';
 
 const SectionLandingGallery: React.FC = () => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'headers.header-two.home',
+  });
   return (
     <section className='flex flex-col items-center'>
-      <Header heading='h2' label='WE HAVE FOR ALL' highLightedWord='CHOICES' />
+      <Header
+        heading='h2'
+        label={t('we-have-for-all-choices.label') as string}
+        highLightedWord={t('we-have-for-all-choices.word') as string}
+      />
       <div className='mt-20 grid w-full grid-cols-2 gap-7'>
         <div className='flex flex-col gap-7'>
           <div className='relative h-96'>

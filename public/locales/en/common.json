@@ -1,0 +1,26 @@
+{
+   "headers": {
+      "header-two": {
+         "home": {
+            "get-all-you-allways-wanted": {
+               "label": "GET ALL YOU ALWAYS",
+               "word": "WANTED"
+            }, 
+            "we-have-for-all-choices": {
+               "label": "WE HAVE FOR ALL",
+               "word": "CHOICES"
+            },
+            "you-have-things-to-sell":{
+               "0": {
+                  "label": "YOU HAVE THINGS TO",
+                  "word": "SELL?"
+               },
+               "1": {
+                  "label": "WE'VE GOT YOUR",
+                  "word": "BACK"
+               }
+            }
+         }
+      }
+   }
+}

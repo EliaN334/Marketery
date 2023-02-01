@@ -1,0 +1,11 @@
+{
+   "links": {
+      "home": "Home",
+      "products": "Products",
+      "daily-offers": "Daily offers",
+      "sell": "Sell",
+      "about": "About",
+      "sign-in": "Sign in",
+      "sign-up": "Sign up"
+   }
+}

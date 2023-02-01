@@ -7,6 +7,8 @@ import {
 } from '@/components/organisms/sections';
 import type { NextPageWithLayout } from '@/types/global';
 import Head from 'next/head';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import type { GetServerSideProps } from 'next';
 
 const HomePage: NextPageWithLayout = () => {
   return (
@@ -17,6 +19,14 @@ const HomePage: NextPageWithLayout = () => {
       <SectionLandingSeller />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'en', ['navbar', 'common'])),
+    },
+  };
 };
 
 HomePage.getLayout = (page) => (
