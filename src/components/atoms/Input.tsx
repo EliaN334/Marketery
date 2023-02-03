@@ -110,7 +110,8 @@ const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
             ) as ListBoxOption
           );
       }
-    }, [props?.value, listBox]);
+      // eslint-disable-next-line
+    }, [props?.value]);
     if (listBox && 'options' in props) {
       // eslint-disable-next-line
       const { options, onChange, value, onSelectedOption } = props;

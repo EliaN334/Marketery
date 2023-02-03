@@ -21,6 +21,11 @@
                }
             }
          }
+      },
+      "header-one": {
+         "home": {
+            "low-prices-every-day": "LOW PRICES EVERY DAY"
+         }
       }
    }
 }

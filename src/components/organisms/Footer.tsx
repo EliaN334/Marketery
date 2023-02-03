@@ -13,6 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 const icons = [
   {
@@ -29,13 +30,15 @@ const icons = [
   },
 ];
 
+type FormValues = {
+  'listbox-lang': 'en' | 'es';
+  currency: 'usd' | 'cad' | 'eu';
+};
+
 const Footer: React.FC = () => {
-  const { watch, control } = useForm({
-    defaultValues: {
-      'listbox-lang': 'en',
-    },
-  });
+  const { watch, control } = useForm<FormValues>();
   const { i18n } = useTranslation();
+  const { push } = useRouter();
   console.log(watch('listbox-lang'));
   return (
     <footer className='mb-5 mt-auto px-16 py-5 pt-24'>
@@ -79,20 +82,18 @@ const Footer: React.FC = () => {
             </p>
             <Controller
               name='listbox-lang'
-              defaultValue='en'
+              defaultValue={i18n.resolvedLanguage as 'en' | 'es'}
               control={control}
               render={({ field: { value, onChange } }) => (
                 <Input
                   value={value}
                   onChange={onChange}
                   listBox
-                  onSelectedOption={async ({ value }) => {
-                    console.log(value, ' selected now');
-                    i18n.changeLanguage('es', (err) => {
-                      if (err) console.error(err);
-                      if (!err) console.log('changed');
-                    });
-                  }}
+                  onSelectedOption={() =>
+                    push('/', undefined, {
+                      locale: value,
+                    })
+                  }
                   options={[
                     {
                       name: 'English',
@@ -108,25 +109,35 @@ const Footer: React.FC = () => {
                 />
               )}
             />
-            <Input
-              className='mt-4'
-              listBox
-              options={[
-                {
-                  name: 'USD',
-                  value: 'usd',
-                },
-                {
-                  name: 'CAD',
-                  value: 'cad',
-                },
-                {
-                  name: 'EU',
-                  value: 'EU',
-                },
-              ]}
-              label='Currency'
-              icon={CurrencyDollarIcon}
+
+            <Controller
+              name='currency'
+              defaultValue='usd'
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  value={value}
+                  onChange={onChange}
+                  className='mt-4'
+                  listBox
+                  options={[
+                    {
+                      name: 'USD',
+                      value: 'usd',
+                    },
+                    {
+                      name: 'CAD',
+                      value: 'cad',
+                    },
+                    {
+                      name: 'EU',
+                      value: 'EU',
+                    },
+                  ]}
+                  label='Currency'
+                  icon={CurrencyDollarIcon}
+                />
+              )}
             />
           </ul>
         </div>

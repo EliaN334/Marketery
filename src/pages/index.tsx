@@ -1,6 +1,7 @@
 import { HomeLayout } from '@/components/layouts';
 import {
   SectionCarousel,
+  SectionHero,
   SectionLandingCategories,
   SectionLandingGallery,
   SectionLandingSeller,
@@ -13,7 +14,8 @@ import type { GetServerSideProps } from 'next';
 const HomePage: NextPageWithLayout = () => {
   return (
     <div className='space-y-24'>
-      {/* <SectionCarousel /> */}
+      <SectionHero />
+      <SectionCarousel />
       <SectionLandingCategories />
       <SectionLandingGallery />
       <SectionLandingSeller />
